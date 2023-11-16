@@ -79,6 +79,15 @@ const DeviceInfoSchema = mongoose.Schema({
         required: true
     },
 
+    systemName:{
+        type: String,
+        required: true
+    },
+    systemVersion:{
+        type: String,
+        required: true
+    }
+
 
 })
 
@@ -112,8 +121,10 @@ const LocationDataSchema = mongoose.Schema({
     },
 
     connectionType:{
-        type: String,
+        type:String,
+        required:true
     },
+    
 
     cellularSignalStrength:{
         type: Number
@@ -121,14 +132,21 @@ const LocationDataSchema = mongoose.Schema({
 
     wifiSignalStrength: {
         type: Number
+    },
+
+    connectiondetails: {
+        type: Object,
+        required:true
     }
+    
  })
 
 
  const DeviceDataModel = mongoose.Schema({
     deviceId :{
         type: String,
-        unique:true
+        // unique:true,
+        default:v4()
         
     },
     deviceInfo:{

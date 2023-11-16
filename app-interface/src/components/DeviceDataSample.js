@@ -28,7 +28,6 @@ const DeviceDataTable = ({ deviceInfoData, locationData, networkData }) => {
       <DataTable
         columns={deviceInfoColumns}
         data={deviceInfoData}
-        
       />
 
       <Text style={styles.header}>Location Data</Text>

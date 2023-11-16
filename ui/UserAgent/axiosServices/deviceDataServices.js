@@ -2,9 +2,9 @@ import axios from "axios";
 
 export const serverUrl = "http://localhost:3000/api/v1/useragent/devices"
 
-export const postDeviceData = async (deviceId,deviceData) => {
+export const postDeviceData = async (deviceInfo,deviceNetwork,deviceLocaton) => {
     try {
-        const response = await axios.post(`${serverUrl}/postdeviceinfo`,deviceId,deviceData)
+        const response = await axios.post(`${serverUrl}/postdeviceinfo`,deviceInfo,deviceNetwork,deviceLocaton)
         return response.data
     }catch(err) {
 
@@ -12,7 +12,7 @@ export const postDeviceData = async (deviceId,deviceData) => {
 }
 
 
-export const getDeviceData = async () => {
+export const getDevicesData = async () => {
     try {
        const response = await axios.get(`${serverUrl}/getdeviceinfo`)
        return response.data
@@ -42,9 +42,9 @@ export const updateLocationInfo = async (deviceId,updatedLocation) => {
     }
 }
 
-export const updateNetworkInfo = async (deviceId,updatedNetworkInfo) => {
+export const updateNetworkInfo = async (deviceId,updatedNetwork) => {
     try {
-      const response = await axios.patch(`${serverUrl}/updatenetworkinfo`,deviceId,updatedNetworkInfo)
+      const response = await axios.patch(`${serverUrl}/updatenetinfo`,deviceId,updatedNetwork)
       return response.data
     }catch(error) {
         console.error(error.message)

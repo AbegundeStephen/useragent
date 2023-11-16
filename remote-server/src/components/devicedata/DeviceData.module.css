@@ -1,0 +1,54 @@
+.booleanCell{
+    padding:8px;
+    border-radius:4px;
+    text-align:center;
+    display:inline-block;
+    width:80px ;
+    color:#000}
+
+
+
+.booleanTrue{
+    background-color:#4caf50;
+    color:#fff;
+    padding:1px 5px;
+    border-radius: 5px;
+}
+
+.booleanFalse{
+background-color:#f44336;
+color:#fff;
+padding:1px 5px;
+border-radius: 5px;
+}
+
+.tableContainer {
+    overflow: hidden;
+    width:100%;
+    background: #13023d;
+    position: relative;
+    padding: 24px;
+}
+
+.hover-display {
+    position: absolute;
+    top: 0;
+    left:0;
+    background-color: #fff;
+    padding:8px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.reactDataTableComponent {
+    transition: opacity 0.5s ease-in;
+transition-delay: 5s;
+}
+
+.reactDataTableComponent-enter {
+    opacity: 0;
+}
+.reactDataTableComponent-enter-active{
+    opacity: 1;
+}

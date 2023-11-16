@@ -1,6 +1,6 @@
 import React from "react";
 import { useState,useEffect } from "react";
-import { getDeviceInfo } from "../../services/deviceInfoService";
+// import { getDeviceInfo } from "../../services/deviceInfoService";
 import NetInfo from "@react-native-community/netinfo"
 import {View,Text} from 'react-native'
 import {DataTable} from "react-native-paper";
@@ -24,7 +24,7 @@ const NetworkInfo = () => {
 
       const unsubscribe = NetInfo.addEventListener((state) => {
         setNetworkInfo([state]);
-        socket.emit("updatedNetworkInfo",state);
+        // socket.emit("updatedNetworkInfo",state);
       });
       return () => {
         unsubscribe()
@@ -34,7 +34,6 @@ const NetworkInfo = () => {
 
   return ( 
     <View>
-      <Text>Network Info</Text>
         <DataTable>
           <DataTable.Header>
             <DataTable.Title>Type</DataTable.Title>
