@@ -1,4 +1,14 @@
- const deviceData = [
+import styles from '../components/devicedata/DeviceData.module.css'
+import CustomCell from '@/components/customCell/customCell'
+
+// const CustomCell = ({id,value}) => {
+//     return (
+//         <Tippy content={value}>
+//             <div>{value}</div>
+//         </Tippy>
+//     )
+// }
+const deviceData = [
     {   id: 1,
         deviceId: "546YTH73",
         deviceName: "Google Pixel 5",
@@ -24,7 +34,7 @@
         androidVersion:10,
         phoneNumber: 9058796195,
         carrier:"Glo",
-        isConnected: true,
+        isConnected: false,
         isInternetReacheable:true,
         connectionType:"Cellular",
         location:"church str,Oworonshoki"
@@ -39,7 +49,7 @@
         phoneNumber: 9058796195,
         carrier:"Glo",
         isConnected: true,
-        isInternetReacheable:true,
+        isInternetReacheable:false,
         connectionType:"Cellular",
         location:"church str,Oworonshoki"
     },{   id: 4,
@@ -52,8 +62,8 @@
         androidVersion:10,
         phoneNumber: 9058796195,
         carrier:"Glo",
-        isConnected: true,
-        isInternetReacheable:true,
+        isConnected: false,
+        isInternetReacheable:false,
         connectionType:"Cellular",
         location:"church str,Oworonshoki"
     },{   id: 5,
@@ -148,6 +158,24 @@
     },
 ]
 
+export const deviceDataColumns = [
+    { name: "deviceId",selector:row=>row.deviceId,},
+    { name: "deviceName", selector:row=>row.deviceName},
+    {name:"location", selector:row=>row.location, cell: (row,id) => <CustomCell value={row.location}/>},
+    { name: "isCharging",selector:'isCharging',sortable:true,cell:row=><div><div className={`${row.isCharging ? styles.booleanTrue : styles.booleanFalse}`}>{row.isCharging? "True" : "False"}</div></div>},
+    { name: "batteryLevel", selector:row=>row.batteryLevel},
+    {name:"ipAddress",selector:row=>row.ipAddress,cell: (row,id) => <CustomCell value={row.ipAddress}/>},
+    {name:"macAddress", selector:row=>row.macAddress,cell: (row,id) => <CustomCell value={row.macAddress}/>},
+    {name:"androidVersion", selector:row=>row.androidVersion},
+    {name:"phoneNumber", selector:row=>row.phoneNumber},
+    {name:"carrier",selector:row=>row.carrier},
+    {name:"isConnected",selector:"isCOnnected", sortable:true, cell:row=><div className={`${row.isConnected ? styles.booleanTrue : styles.booleanFalse}`} onClick={() => setSelectedCell(row.isConnected)}>{row.isConnected? "True" : "False"}</div>},
+    {name:"isInternetReacheable",selector:"isInterNetreacheable", cell:row=><div><div className={`${row.isConnected ? styles.booleanTrue : styles.booleanFalse}`}>{row.isConnected? "True" : "False"}</div></div>},
+    {name:"connectionType", selector:row=>row.connectionType},
+    
+
+]
+
 export const mappedData = deviceData.map(item => ({
     id: item.id,
     deviceName:item.deviceName,
@@ -163,5 +191,5 @@ export const mappedData = deviceData.map(item => ({
     connectionType:item.connectionType,
     isInternetReacheable:item.isInternetReacheable,
     location:item.location
-}))
+}));
 
