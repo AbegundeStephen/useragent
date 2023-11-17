@@ -8,7 +8,7 @@ const Navbar = ({onLogout,onRefresh}) => {
     <div className={styles.navbar}>
         <button className={styles.logoutButton} onClick={onLogout}>Logout</button>
         <button className={styles.refreshButton} onClick={onRefresh}>
-            <span className={styles.refreshIcon}><HiRefresh/></span>
+            <span className={styles.refreshIcon}><HiRefresh size={23} color='white'/></span>
             Refresh
         </button>
     </div>
