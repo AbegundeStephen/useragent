@@ -1,142 +1,79 @@
 import mongoose, { Mongoose } from "mongoose";
 import {v4} from "uuid"
 
-
-
-
-
-
-// const DeviceDataModel = mongoose.Schema({
-//     // deviceId :{
-//     //     type: mongoose.Schema.Types.ObjectId,
-//     //     // required:true,
-//     //     // unique:true,
-//     // },
-//     deviceInfo:{
-//         type: Object,
-//         required:true,
-        
-//     },
-//     deviceNetwork: {
-//         type:Object
-//     },
-//     deviceLocation:{
-//         type:Object,
-//         required:true,
-//     }
-// },{timestamps:true})
-
-// // DeviceDataModel.pre('save', function(next) {
-// //     if (!this.deviceId) {
-// //         this.deviceId = DeviceInfo.getUniqueId();
-// //     }
-// //     next()
-// // })
-
-// export default mongoose.model("Devices", DeviceDataModel)
-
-
-
-
-
 const DeviceInfoSchema = mongoose.Schema({
-    deviceId:{
-        type: String,
-        required: true
-    },
-
     deviceName: {
         type: String,
-        required: true
+        
     },
-    manufacturer: {
+    brand: {
         type: String,
-        required: true
+        
     },
-    model: {
+    osName: {
         type: String,
-        required: true
+        
     },
 
-    batteryLevel: {
+    osVersion: {
         type: Number,
 
     },
-    batteryStatus: {
+    androidId: {
         type: String,
     },
-
-    isCharging: {
-        type: Boolean,
+    androidVersion:{
+        type: Number,
     },
-    isBatterySaverMode: {
-        type: Boolean,
-        required: true
+    deviceType:{
+        type:String
     },
-
-    isLowPowerMode: {
-        type: Boolean,
-        required: true
+    totalMemory:{
+        type:Number
     },
-
-    systemName:{
-        type: String,
-        required: true
+    uptime:{
+        type:String
     },
-    systemVersion:{
-        type: String,
-        required: true
-    }
+  
 
 
+
+    
 })
-
+ const BateryDataSchema = mongoose.Schema({
+    batteryState:{
+        type:String
+    },
+    batteryLevel:{
+        type:String
+    }
+ })
 
 const LocationDataSchema = mongoose.Schema({
-    latitude: {
-        type: Number,
-        required:  true,
+    deviceLocation:{
+        type: Object,
+        required: true
     },
-
-    longitude:{
-        type: Number,
-        required: true,
-    },
-
-    accuracy: {
-        type: Number,
-    },
-
-    timestamps: {
-        type: Date,
-        default:Date.now,
-    },
-
+    deviceAddress: {
+        type: String,
+        required:true
+    }
     })
 
  const NetworkDataSchema = mongoose.Schema({
-    isConnected:{
-        type: Boolean,
+    networkState:{
+        type: Object,
         required: true,
     },
-
-    connectionType:{
-        type:String,
-        required:true
+    ipAddress:{
+        type: String,
+      
+        default:null
     },
-    
-
-    cellularSignalStrength:{
-        type: Number
-    },
-
-    wifiSignalStrength: {
-        type: Number
-    },
-
-    connectiondetails: {
-        type: Object,
-        required:true
+    carrier:{
+        type: String,
+        default:null
+      
     }
     
  })
@@ -145,13 +82,15 @@ const LocationDataSchema = mongoose.Schema({
  const DeviceDataModel = mongoose.Schema({
     deviceId :{
         type: String,
-        // unique:true,
-        default:v4()
-        
+      
     },
     deviceInfo:{
         type: DeviceInfoSchema,
         required: true
+    },
+    deviceBattery: {
+        type:  BateryDataSchema,
+        required:true
     },
     deviceLocation:{
         type: LocationDataSchema,
@@ -163,44 +102,12 @@ const LocationDataSchema = mongoose.Schema({
      }
  },{timestamps:true})
 
- DeviceDataModel.pre("save", async function(next) {
-    if(!this.deviceId) {
-        this.deviceId = await v4()
-    }
-    next()
- })
+//  DeviceDataModel.pre("save", async function(next) {
+//     if(!this.deviceId) {
+//         this.deviceId = await v4()
+//     }
+//     next()
+//  })
 
  export default mongoose.model("Devices", DeviceDataModel)
 
-
-
-
-
-
-// const DeviceDataModel = mongoose.Schema({
-//     deviceInfo: {
-//         deviceId: String,
-//         deviceName: String,
-//         manufacturer: String,
-//         model: String,
-//         systemName: String,
-//         systemVersion: String
-//     },
-
-//     deviceLocation: {
-//         latitude: Number,
-//         longitude: Number,
-//         accuracy: Number,
-//         timestamp: Number
-//     },
-
-//     deviceNetwork: {
-//         isConnected: Boolean,
-//         connectionType: String,
-//         cellularSignalStrength: Number,
-//        wifiSignalStrength: Number
-//   },
-
-// }, {timestamp:true})
-
-// export default mongoose.model("Devices", DeviceDataModel)

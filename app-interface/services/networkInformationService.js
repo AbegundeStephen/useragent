@@ -1,40 +1,124 @@
-import NetInfo from '@react-native-community/netinfo';
+// Import expo-network library
+import * as Network from 'expo-network';
+import * as Cellular from 'expo-cellular'
+import { updateExistingData } from '../axiosServices/deviceDataServices';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
-class NetworkInfoService {
+
+
+// Define networkInformation classs 
+class networkInformation {
+  // Define constructor
   constructor() {
-    this.isConnected = null;
-    this.type = null;
-    this.subscribe = null;
+    // Initialize network state, ip address and mac address properties
+    this.networkState = null;
+    this.ipAddress = null;
+    this.carrier = null;
+    // this.macAddress = null;
+
+    this.getNetworkState()
+    
   }
 
-  // Initialize the network info service
-  init = (cb) => {
-    // Subscribe to network state changes
-      this.subscribe = NetInfo.addEventListener(state => {
-        console.log("NetInfo state", state)
-       cb(state)
-      this.updateNetworkState(state.isConnected, state.type);
-    });
+  async getId() {
+    let id = await AsyncStorage.getItem("deviceId")
+    this.mobileId = id
+  }
 
-    // Get the initial network state
-    this.updateNetworkState();
-  };
+  // Define async method to get network state, ip address and mac address
+  async getNetworkState() {
+    // Try to get network state using Network.getNetworkStateAsync()
+    try {
+      let networkState = await Network.getNetworkStateAsync();
+      // dispatch(SET_NETWORK_STATE(networkState))
 
-
-  // Update the local state with the latest network state
-  updateNetworkState = (isConnected, type) => {
-    this.isConnected = isConnected;
-    this.type = type;
-    // You can update the React component's state or trigger any other actions here
-  };
-
-  // Clean up the subscribe when the component unmounts
-  unsubscribe = () => {
-    if (this.subscription) {
-      this.subscription();
+      // Assign network state to property
+      this.networkState = networkState;
+      console.log("network state",networkState)
+      return networkState
+    } catch (error) {
+      // Handle error
+      console.error(error);
     }
-  };
+  }
+  // Try and get the network carrier
+  async getNetworkCarrier() {
+   try {
+
+    let carrier = await Cellular.getCarrierNameAsync()
+    console.log('carrier: ', carrier)
+    return this.carrier = carrier
+
+    
+
+   }catch (error) {
+
+    console.error("Failed to get carrier", error.message)
+    return this.carrier
+
+   }
+  }
+  
+
+  //Try and get ipaddress
+  async getIpAddress() {
+    try {
+      let ipAddress = await Network.getIpAddressAsync();
+      // Assign ip address to property
+      this.ipAddress = ipAddress;
+      console.log("ipAddress", ipAddress)
+      return ipAddress
+    } catch (error) {
+      // Handle error
+      console.error(error);
+    }
+  }
+
+  // Define method to subscribe to network state changes using Network.addNetworkStateListener()
+  async subscribeToNetworkChanges() {
+  
+    // Define callback function to handle network state changes
+    let callback = (networkState) => {
+      // Update network state property
+      this.networkState = networkState;
+      // Log network state changes
+      console.log('Network state changed:', networkState);
+    };
+    // Add network state listener and return the subscription object
+    let newState = await Network.getNetworkStateAsync(callback);
+    console.log("New network state:", newState);
+    let mobileId = await AsyncStorage.getItem("mobileId")
+    // let deviceId = localStorage.getItem("deviceId")
+    console.log("deviceId: "+ this.mobileId)
+    if (mobileId) {
+      let updatedNetwork1 = {
+          deviceId:mobileId,
+          updatedNetwork:{
+          networkState: newState,
+          ipAddress:await this.getIpAddress(),
+          carrier: await this.getNetworkCarrier()
+          }
+      }
+      console.log("updated network1: "+JSON.stringify(updatedNetwork1,null, 2))
+      try{
+        let updatedNetwork= JSON.stringify(updatedNetwork1)
+         console.log("updated Network: "+ updatedNetwork)
+      const data = await updateExistingData(updatedNetwork1,'update network')
+        console.log("networkState updated succesfully: " +JSON.stringify(data))
+      }catch(error){
+        console.log("Unable to update network,no mobileId: " + error)
+      }
+
+      
+    }
+    return newState
+  }
+
+  //Define method to unsubscribe from network state changes using subscription.remove()
+  // unsubscribeFromNetworkChanges(subscription) {
+  //   // Remove network state listener
+  //   subscription.remove()
+  //}
 }
 
-const networkInfoService = new NetworkInfoService();
-export default networkInfoService;
+export {networkInformation}

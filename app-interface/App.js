@@ -1,112 +1,164 @@
-import React, { useEffect, useState } from 'react';
-import { View, Text, Button } from 'react-native';
-// import Geolocation from '@react-native-community/geolocation';
-import DeviceInfo from 'react-native-device-info';
-import axios from 'axios';
-import networkInfoService from './services/networkInformationService';
+import React, { useEffect, useState,  } from 'react';
+import { View, Text, ScrollView, StyleSheet, ActivityIndicator, Button, SafeAreaView} from 'react-native';
+import { postDeviceData} from './axiosServices/deviceDataServices.js';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import shortid from 'shortid'
+import DeviceInfo from './src/components/DeviceInfo.js';
+import NetworkInfo from './src/components/NetworkInfo.js';
+import LocationInfo from "./src/components/LocationInfo.js"
+import BatteryStatus from './src/components/Battery.js';
+import { store,persistor } from './redux/store.js';
+import { Provider } from 'react-redux';
+import { PersistGate } from 'redux-persist/integration/react';
+import { useDispatch,useSelector } from 'react-redux';
+import { selectDeviceNetwork } from './redux/networkSlice.js';
+import { SET_ID } from './redux/deviceIdSlice.js';
+import { LinearGradient } from 'expo-linear-gradient'
+import { selectDeviceLocation } from './redux/locationSlice.js';
+import { selectDeviceBattery } from './redux/batterySlice.js';
+import { selectDeviceInfo } from './redux/deviceInfoSlice.js';
 
-export default function App() {
-  const [location, setLocation] = useState(null);
-  const [deviceInfo, setDeviceInfo] = useState(null);
-  const [deviceNetwork, setDeviceNetwork]= useState(null``)
 
-  useEffect(() => {
-    // Initialize the network info service
-    networkInfoService.init(setDeviceNetwork);
+ function App() {
+ const [deviceId, setDeviceId] = useState("")
+ const deviceNetwork = useSelector(selectDeviceNetwork)
+ const deviceLocation = useSelector(selectDeviceLocation)
+ const deviceBattery = useSelector(selectDeviceBattery)
+ const deviceInfo = useSelector(selectDeviceInfo)
 
-    // // Get device location
-    // Geolocation.getCurrentPosition(
-    //   position => {
-    //     setLocation({
-    //       type: 'Point',
-    //       coordinates: [position.coords.latitude, position.coords.longitude],
-    //     });
-    //   },
-    //   error => {
-    //     console.log('Error getting location:', error);
-    //   },
-    //   { enableHighAccuracy: true, timeout: 15000, maximumAge: 10000 }
-    // );
+ const dispatch = useDispatch()
 
-    // Get device information
-    // setDeviceInfo(DeviceInfo.getModel());
+ console.log("deviceLocation from redux: "+ JSON.stringify(deviceLocation))
+ console.log("deviceNetwork from redux: "+ JSON.stringify(deviceNetwork))
+ console.log("deviceBattery from redux: "+ JSON.stringify(deviceBattery))
+ console.log("deviceInfo from redux: "+ JSON.stringify(deviceInfo))
 
-    // Clean up subscriptions when the component unmounts
-    return () => {
-      networkInfoService.unsubscribe();
-    };
-  }, []);
 
-  // const sendDataToServer = async () => {
-  //   try {
-  //     // Send data to the server
-  //     await axios.post('http://localhost:3000/api/data', {
-  //       location,
-  //       networkState: networkInfoService.type,
-  //       deviceInfo,
-  //     });
-  //     console.log('Data sent successfully!');
-  //   } catch (error) {
-  //     console.error('Error sending data:', error);
-  //   }
-  // };
-console.log(networkInfoService.init)
-console.log(deviceNetwork)
-  return (
-    <View>
-      {/* <Text>Device Location: {location ? JSON.stringify(location) : 'Loading...'}</Text> */}
-      <Text>Network State: {networkInfoService.isConnected? 'Connected' : 'Disconnected'}</Text>
-      <Text>Network Type: {networkInfoService.type || 'Loading...'}</Text>
-      {/* <Text>Device Info: {deviceInfo || 'Loading...'}</Text>
-      <Button title="Send Data" onPress={sendDataToServer} /> */}
-    </View>
-  );
+//useEffect to run initial data posting to the server
+ useEffect(() => {
+//  if(status === "Fetched"){
+  console.log("Preparing to post Initial Data...");
+  
+  const uploadDeviceData = async () => {
+    try {
+      // const storedDeviceId =  localStorage.getItem("deviceId")
+      const mobileId = await AsyncStorage.getItem("deviceId")
+      console.log("MobileId",mobileId)
+      if (mobileId) {
+        console.log("Device data already posted")
+      }
+      else {
+        console.log('posting Initial Data')
+        const newDeviceId = shortid.generate()
+        dispatch(SET_ID(newDeviceId))
+        setDeviceId(newDeviceId)
+        const data = {
+          deviceId:newDeviceId,
+          deviceNetwork:deviceNetwork,
+          deviceLocation:deviceLocation,
+          deviceInfo:deviceInfo,
+          deviceBattery:deviceBattery
+        }
+        console.log("Data:"+JSON.stringify(data))
+        const response = await postDeviceData(data);
+        console.log("Post",response)
+        if (response != undefined){
+        await AsyncStorage.setItem("mobileId",response.result.deviceId)
+        localStorage.setItem("deviceId", response.result.deviceId )  
+        } 
+      }
+
+    
+      
+  }catch(error) {
+    console.error(error)
+  }}
+
+  // }
+  uploadDeviceData()
+
+ },[])
+ 
+ const data = {
+  deviceId:deviceId,
+  deviceNetwork:deviceNetwork,
+  deviceLocation:deviceLocation,
+  deviceInfo:deviceInfo,
+  deviceBattery:deviceBattery
 }
 
+console.log("Data"+JSON.stringify(data,null,2))
 
-//Location
-// import React, { useEffect, useState } from 'react';
-// import { View, Text, Button } from 'react-native';
-// import DeviceInfo from 'react-native-device-info';
-// import axios from 'axios';
-// import locationService from './LocationService'; // Update the path accordingly
+  return (
+    <SafeAreaView style={styles.container}>
+    <ScrollView >
+   
+        <LinearGradient
+  colors={['blue', 'yellow']}
+  start={{ x: 0, y: 0 }}
+  end={{ x: 1, y: 1 }}
+  style={{ flex: 1,
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginTop:50,gap:10,height:'auto' }}
+> 
+     <NetworkInfo />
+     <DeviceInfo />
+     <BatteryStatus/>
+    <LocationInfo/> 
+    </LinearGradient>
+    </ScrollView>
+     </SafeAreaView>
+     
+  )
+}
+   
 
-// export default function App() {
-//   const [location, setLocation] = useState(null);
-//   const [deviceInfo, setDeviceInfo] = useState(null);
 
-//   useEffect(() => {
-//     // Initialize the location service
-//     locationService.init();
+const styles = StyleSheet.create({
+  container: {
 
-//     // Get device information
-//     setDeviceInfo(DeviceInfo.getModel());
+    alignItems: 'center',
+    justifyContent: 'center',
+    height:'100%',
+    marginTop:'45px',
+     backgroundColor:'-moz-radial-gradient(circle at 3% 25%, rgba(0, 40, 83, 1) 0%, rgba(4, 12, 24, 1) 25%)',
+    color:"black"
+  },
+  title: {
+    fontSize: 24,
+    
+    fontWeight: 'bold',
+    margin: 10,
+  },
+  text: {
+    fontSize: 18,
+    margin: 5,
+    color:"black" 
+  },
 
-//     // Clean up subscriptions when the component unmounts
-//     return () => {
-//       locationService.unsubscribe();
-//     };
-//   }, []);
+  buttonContainer: {
+    marginTop:'65px',
+    flexDirection: "row",
+    justifyContent: "space-around",
+    gap:10,
+    // width: "100%",
+    position: "absolute fixed",
+    bottom: 0,
+  },
+  button:{
+    color:"green",
+    
+  },
+  gradient: {
+      height: 'fit-content',
+      zIndex: 3,
+      width: '100%',
+      maxWidth: '640px',
+      backgroundColor:'-moz-radial-gradient(circle at 3% 25%, rgba(0, 40, 83, 1) 0%, rgba(4, 12, 24, 1) 25%)',
+  }
 
-//   const sendDataToServer = async () => {
-//     try {
-//       // Send data to the server
-//       await axios.post('http://localhost:3000/api/data', {
-//         location,
-//         networkState: 'N/A', // Add your network state logic here
-//         deviceInfo,
-//       });
-//       console.log('Data sent successfully!');
-//     } catch (error) {
-//       console.error('Error sending data:', error);
-//     }
-//   };
+});
 
-//   return (
-//     <View>
-//       <Text>Device Location: {location ? JSON.stringify(location) : 'Loading...'}</Text>
-//       <Text>Device Info: {deviceInfo || 'Loading...'}</Text>
-//       <Button title="Send Data" onPress={sendDataToServer} />
-//     </View>
-//   );
-// }
+
+export default App

@@ -19,26 +19,28 @@ const io =  new Server(server)
 app.use(express.json())
 app.use(express.urlencoded({extended:false}))
 app.use(cookieParser())
-app.use(cors({
-    origin:["http://localhost:5000"],
-    credentials: true,
-}))
-
-app.use((req,res, next) => {
-    req.io = io
-    next()
-})
-app.use(error)
+app.use(cors())
 
 
 
-app.use("/api/devices", deviceRoutes)
+app.use("/api/v1/useragent/devices", deviceRoutes)
 app.use("/api/users", userRoutes)
  
  app.get("/*", (req, res) => {
     res.send("Home Page")
     res.redirect("/useragent/api/v1/devices")
  })
+
+app.use((req,res, next) => {
+    req.io = io
+    next()
+})
+app.use((req,res,next) => {
+    res.header("Access-Control-Allow-Headers","*")
+})
+app.use(error)
+
+
 
  const PORT = process.env.PORT || 5000
 

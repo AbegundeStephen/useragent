@@ -6,15 +6,15 @@ import {io} from '../index.js'
 
 
 export const postDeviceData = asyncHandler(async(req,res) => {
-        const {deviceInfo, deviceNetwork, deviceLocation} = req.body
+        const {deviceId,deviceInfo,deviceBattery,deviceNetwork,deviceLocation} = req.body
 
-        if(!deviceInfo || !deviceNetwork || !deviceLocation){
+        if(!deviceId || !deviceInfo || !deviceBattery || !deviceNetwork || !deviceLocation){
             res.status(400)
             throw new Error("Please provide all required fields")
         }
 
       try {
-         const result = await DeviceDataModel.create({deviceInfo,deviceNetwork,deviceLocation})
+         const result = await DeviceDataModel.create({deviceId,deviceInfo,deviceBattery,deviceNetwork,deviceLocation})
          res.status(200).json({success: true, message:"Device Data Has Been Posted to the Database",result})
          io.emit("postdevicedata", {result})
          console.log("Data saved successfully",result)
@@ -30,20 +30,21 @@ export const postDeviceData = asyncHandler(async(req,res) => {
 export const updateNetworkInfo = asyncHandler(async (req, res) => {
 
     try {
-        const {id,updatedNetwork} = req.body
+        const {deviceId,updatedNetwork} = req.body
       
 
-        const devicedata = await DeviceDataModel.findById(id)
+        const devicedata = await DeviceDataModel.findOne({deviceId})
+        console.log("devicedata", devicedata)
         if(!devicedata) {
             res.status(404)
             throw Error("No Device Data matches the provided id")
 
         }
 
-        const newNetInfo = await DeviceDataModel.updateOne({_id:id}, {$set:{deviceNetwork:updatedNetwork}},{new:true, runValidators: true,upsert:true})
+        const newNetInfo = await DeviceDataModel.updateOne({deviceId}, {$set:{deviceNetwork:updatedNetwork}},{new:true, runValidators: true,})
              if (newNetInfo.modifiedCount > 0) {
-                console.log("Network Info Succesfully Updated")
-                io.emit("updateNetworkInfo", {id,newNetInfo})
+                console.log("Network Info Succesfully Updated",newNetInfo)
+                io.emit("dataUpdate", {deviceId,updatedNetwork})
                 res.status(200).json({newNetInfo})
         
         
@@ -59,30 +60,79 @@ export const updateNetworkInfo = asyncHandler(async (req, res) => {
     }
 })
 
+export const updateBatteryLevel = asyncHandler(async(req,res) => {
+    try{
+        const {deviceId,batteryLevel} = req.body
+        const deviceData = await DeviceDataModel.findOne({deviceId})
+
+        if(!deviceData) {
+            res.status(404)
+            throw Error ("No device data matches the provided filter parameter")
+        }
+
+        const result = await DeviceDataModel.updateOne({deviceId}, {$set:{"deviceBattery.batteryLevel":batteryLevel}},{new:true, runValidators: true,upsert:true})
+        if (result.modifiedCount > 0) {
+            // Emit socket event for real-time update
+            io.emit('dataUpdate', { deviceId,batteryLevel});
+            console.log("Battery Level Succesfully Updated",result)
+            res.status(200).json({ success: true, message: 'Battery Info updated successfully' });
+          } else {
+            res.status(404).json({ success: false, message: 'Device not found' });
+          }
+      
+    }catch(error){
+        console.group(error)
+    }
+})
+
+export const updateBatteryState = asyncHandler(async(req,res) => {
+    try{
+        const {deviceId,batteryState} = req.body
+        const deviceData = await DeviceDataModel.findOne({deviceId})
+
+        if(!deviceData) {
+            res.status(404)
+            throw Error ("No device data matches the provided filter parameter")
+        }
+
+        const result = await DeviceDataModel.updateOne({deviceId}, {$set:{"deviceBattery.batteryState":batteryState}},{new:true, runValidators: true,upsert:true})
+        if (result.modifiedCount > 0) {
+            // Emit socket event for real-time update
+            io.emit('dataUpdate', { deviceId,batteryState });
+            console.log("Battery state Succesfully Updated",result)
+            res.status(200).json({ success: true, message: 'Battery Info updated successfully' });
+          } else {
+            res.status(404).json({ success: false, message: 'Device not found' });
+          }
+      
+    }catch(error){
+        console.group(error)
+    }
+})
+
 
 export const updateDeviceInfo = asyncHandler(async (req, res) => {
     try {
-        const {id,updatedDeviceInfo} = req.body
-      
-
-        const devicedata = await DeviceDataModel.findById(id)
+        const {deviceId,updatedDeviceInfo} = req.body
+    
+        const devicedata = await DeviceDataModel.findOne({deviceId})
         if(!devicedata) {
             res.status(404)
-            throw Error("No Device Data matches the provided id")
+            throw Error("No Device Data matches the provided identifier")
 
         }
 
-        const newDeviceInfo = await DeviceDataModel.findByIdAndUpdate({_id:id}, {$set:{deviceInfo:updatedDeviceInfo}},{new:true, runValidators: true,upsert:true})
+        const newDeviceInfo = await DeviceDataModel.updateOne({deviceId}, {$set:{deviceInfo:updatedDeviceInfo}},{new:true, runValidators: true,upsert:true})
         if (newDeviceInfo) {
             console.log("Device Info Succesfully Updated")
-            io.emit("updateLocation", {id,newDeviceInfo}, () => {
-                console.log("Socket is working",id,newDeviceInfo.deviceInfo)
+            io.emit("updateLocation", {deviceId,newDeviceInfo}, () => {
+                console.log("Socket is working",deviceId,newDeviceInfo.deviceInfo)
             })
              res.status(200).json({newDeviceInfo})
         
         
     } else {
-        res.status(400).json({success:false,message:'Error Updating Device Network info'})
+        res.status(400).json({success:false,message:'Error Updating Device info'})
     }
  
     }catch(error){
@@ -95,25 +145,25 @@ export const updateDeviceInfo = asyncHandler(async (req, res) => {
 
 export const updateLocation = asyncHandler(async (req,res) => {
     try {
-        const {id,updatedLocation} = req.body
+        const {deviceId,updatedLocation} = req.body
       
 
-        const devicedata = await DeviceDataModel.findById(id)
+        const devicedata = await DeviceDataModel.findOne({deviceId})
         if(!devicedata) {
             res.status(404)
-            throw Error("No Device Data matches the provided id")
+            throw Error("No Device Data matches the provided identifier")
 
         }
 
-        const newLocation = await DeviceDataModel.updateOne({_id:id}, {$set:{deviceLocation:updatedLocation}},{new:true, runValidators: true})
+        const newLocation = await DeviceDataModel.updateOne({deviceId}, {$set:{"deviceLocation.deviceLocation":updatedLocation.deviceLocation, "deviceLocation.address":updatedLocation.address}},{new:true, runValidators: true})
         if (newLocation.modifiedCount) {
             console.log("Device Location Succesfully Updated")
-            io.emit("updateLocation", {id,newLocation})
+            io.emit("dataUpdate", {deviceId,updatedLocation})
             res.status(200).json({newLocation})
         
         
     } else {
-        res.status(400).json({success:false,message:'Error Updating Device Network info'})
+        res.status(400).json({success:false,message:'Error Updating Device Location info'})
     }
  
     }catch(error){
@@ -126,8 +176,8 @@ export const updateLocation = asyncHandler(async (req,res) => {
 export const fetchDeviceData = asyncHandler( async (req, res) => {
 
     try {
-        const id = req.body
-        const deviceData = await DeviceDataModel.findById({id})
+        const deviceId = req.body
+        const deviceData = await DeviceDataModel.findOne({deviceId})
         console.log("Retrieved Data for the provided id is", deviceData)
         res.status(200).json({result})
     }catch(error) {
