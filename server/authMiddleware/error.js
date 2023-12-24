@@ -3,12 +3,10 @@ const error = (err, req, res, next) => {
     console.log("statuscode",statusCode)
   
     res.status(statusCode);
-    throw error
+    console.log("error: "+ err.message)
+    const stack =  process.env.NODE_ENV === "development" ? err.stack : null
+    console.log("stack: "+ stack)
 
-    // res.json({
-    //   message: err.message,
-    //   stack: process.env.NODE_ENV === "development" ? err.stack : null,
-    // });
   };
 
   export default error
