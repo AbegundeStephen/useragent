@@ -98,7 +98,7 @@ class locationInformation {
 
 
   // Define method to watch location changes using Location.watchPositionAsync()
-   watchLocation() {
+  async watchLocation() {
 
    
 

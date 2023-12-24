@@ -11,29 +11,24 @@ const initialDeviceInfo = {
   deviceInfo : {},
   uptime:null,
 }
+const device = new deviceInformation()
 // Define a functional component that displays the device information
 const DeviceInfo = () => {
 
-const [deviceInfo, setDeviceInfo] = useState(initialDeviceInfo)
+
+const [deviceInfo, setDeviceInfo] = useState(device)
 const dispatch = useDispatch()
   //Useffect to run device information
  useEffect(() => {
   // Create an instance of the deviceInformation class
-  const device = new deviceInformation();
   const fetchDeviceInfo = async () => {
    try {
     let deviceInfo = device.deviceInfo
-     let uptime = await device.getUptime()
-    setDeviceInfo({
-      deviceInfo:deviceInfo,
-      uptime: uptime,
-      
-    })
-
-    dispatch(SET_DEVICE_INFO(device.deviceInfo))
-    dispatch(SET_UPTIME(device.uptime))
+     let uptime = device.uptime
+    dispatch(SET_DEVICE_INFO(deviceInfo))
+    dispatch(SET_UPTIME(uptime))
     
-
+    console.log("deviceInfo: "+ JSON.stringify(device.deviceInfo))
     
 
     }catch(error) {
@@ -46,7 +41,7 @@ const dispatch = useDispatch()
   
 },[]); // Pass an empty array to indicate that the effect should only run once
 
-
+console.log("deviceInfo: "+ JSON.stringify(deviceInfo))
   // Return the JSX element that renders the component
   return (
     <>

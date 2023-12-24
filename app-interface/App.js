@@ -46,6 +46,7 @@ import { selectDeviceInfo } from './redux/deviceInfoSlice.js';
       console.log("MobileId",mobileId)
       if (mobileId) {
         console.log("Device data already posted")
+        
       }
       else {
         console.log('posting Initial Data')
@@ -59,8 +60,8 @@ import { selectDeviceInfo } from './redux/deviceInfoSlice.js';
           deviceInfo:deviceInfo,
           deviceBattery:deviceBattery
         }
-        console.log("Data:"+JSON.stringify(data))
-        const response = await postDeviceData(data);
+        console.log("Data Inside Post:"+JSON.stringify(data))
+        const response = await postDeviceData(JSON.stringify(data));
         console.log("Post",response)
         if (response != undefined){
         await AsyncStorage.setItem("mobileId",response.result.deviceId)

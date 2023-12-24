@@ -34,8 +34,6 @@ useEffect( () => {
 
   fetchLocationInfo()
 
-  location.watchLocation()
-
   
  },[location.deviceLocation]); // Pass an empty dependency array to run the effect only once
 
@@ -44,29 +42,31 @@ useEffect( () => {
 
  //useEffect to watch location changes
 
-//  useEffect(() => {
-//   // Watch location changes and update state
-//   const location = new locationInformation()
-//   const watch = async() => {
-//     try{
-//       location.watchLocation()
-//       await location.getDeviceAddress()
-//       setDeviceLocation(location)
+ useEffect(() => {
+  // Watch location changes and update state
+  const watch = async() => {
+    try{
+      await location.watchLocation()
+      await location.getDeviceAddress()
+      dispatch(SET_LOCATION(location.deviceLocation?.coords))
+      dispatch(SET_ADRRESS(location.deviceAddress))
+      
+      setDeviceLocation(location)
   
-//     }catch(error) {
-//      console.log("Issues watching location changes", error.message)
-//     }
-//    }
-//    watch();
+    }catch(error) {
+     console.log("Issues watching location changes: ", + error)
+    }
+   }
+   watch();
    
   
 
   
-//   // Return a cleanup function to stop watching location
-//   // return () => {
-//   //   location.stopWatchingLocation(sub);
-//   // };
-//  },[])
+  // Return a cleanup function to stop watching location
+  // return () => {
+  //   location.stopWatchingLocation(sub);
+  // };
+ },[dispatch, location])
   
 // console.log("deviceLocation: "+ JSON.stringify(deviceLocation))
 // console.log("coords: "+ JSON.stringify(deviceLocation.deviceLocation?.coords))
