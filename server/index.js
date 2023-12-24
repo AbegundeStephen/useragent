@@ -27,7 +27,6 @@ app.use("/api/v1/useragent/devices", deviceRoutes)
 app.use("/api/users", userRoutes)
  
  app.get("/*", (req, res) => {
-    res.send("Home Page")
     res.redirect("/useragent/api/v1/devices")
  })
 
