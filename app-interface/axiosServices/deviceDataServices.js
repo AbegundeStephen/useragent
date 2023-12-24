@@ -2,17 +2,17 @@ import axios from "axios";
 import io from "socket.io-client";
 
 
-export const serverUrl = "https://useragent-api.onrender.com"
-const socket = io("https://useragent-api.onrender.com")
+export const serverUrl = "http://localhost:5000"
+const socket = io("http://localhost:5000")
 
 export const postDeviceData = async (data) => {
     try {
         const response = await axios.post(`${serverUrl}/api/v1/useragent/devices/postdevicedata`,data
          )
-        console.log("Inside axios: "+response.data)
-        return response.data
+        console.log("Inside axios: "+JSON.stringify(response.data))
+        return response
     }catch(error) {
-        console.error(JSON.stringify(error))
+        console.error(error)
     }
 }
 

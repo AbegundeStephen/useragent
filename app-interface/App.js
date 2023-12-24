@@ -13,7 +13,7 @@ import { SET_ID } from './redux/deviceIdSlice.js';
 import { LinearGradient } from 'expo-linear-gradient'
 import { selectDeviceLocation } from './redux/locationSlice.js';
 import { selectDeviceBattery } from './redux/batterySlice.js';
-import { selectDeviceInfo } from './redux/deviceInfoSlice.js';
+import { selectDeviceInfo, selectUptime } from './redux/deviceInfoSlice.js';
 
 
  function App() {
@@ -21,14 +21,16 @@ import { selectDeviceInfo } from './redux/deviceInfoSlice.js';
  const deviceNetwork = useSelector(selectDeviceNetwork)
  const deviceLocation = useSelector(selectDeviceLocation)
  const deviceBattery = useSelector(selectDeviceBattery)
- const deviceInfo = useSelector(selectDeviceInfo)
+ const deviceInfo= useSelector(selectDeviceInfo)
+ 
+ 
 
  const dispatch = useDispatch()
 
 //  console.log("deviceLocation from redux: "+ JSON.stringify(deviceLocation))
 //  console.log("deviceNetwork from redux: "+ JSON.stringify(deviceNetwork))
 //  console.log("deviceBattery from redux: "+ JSON.stringify(deviceBattery))
-//  console.log("deviceInfo from redux: "+ JSON.stringify(deviceInfo))
+ console.log("deviceInfo from redux: "+ JSON.stringify(deviceInfo))
 
 
 //useEffect to run initial data posting to the server
@@ -40,8 +42,9 @@ import { selectDeviceInfo } from './redux/deviceInfoSlice.js';
     try {
       // const storedDeviceId =  localStorage.getItem("deviceId")
       const mobileId = await AsyncStorage.getItem("deviceId")
+      const deviceId = localStorage.getItem("deviceId")
       console.log("MobileId",mobileId)
-      if (mobileId) {
+      if (mobileId ||deviceId) {
         console.log("Device data already posted")
         
       }
@@ -58,8 +61,8 @@ import { selectDeviceInfo } from './redux/deviceInfoSlice.js';
           deviceBattery:deviceBattery
         }
         console.log("Data Inside Post:"+JSON.stringify(data))
-        const response = await postDeviceData(JSON.stringify(data));
-        console.log("Post",response)
+        const response = await postDeviceData(data);
+        console.log("Post",response.data)
         if (response != undefined){
         await AsyncStorage.setItem("mobileId",response.result.deviceId)
         localStorage.setItem("deviceId", response.result.deviceId )  
@@ -77,13 +80,6 @@ import { selectDeviceInfo } from './redux/deviceInfoSlice.js';
 
  },[])
  
- const data = {
-  deviceId:deviceId,
-  deviceNetwork:deviceNetwork,
-  deviceLocation:deviceLocation,
-  deviceInfo:deviceInfo,
-  deviceBattery:deviceBattery
-}
 
 // console.log("Data"+JSON.stringify(data,null,2))
 

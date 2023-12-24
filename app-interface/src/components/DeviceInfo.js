@@ -16,17 +16,21 @@ const device = new deviceInformation()
 const DeviceInfo = () => {
 
 
-const [deviceInfo, setDeviceInfo] = useState(device)
+const [deviceInfo, setDeviceInfo] = useState(initialDeviceInfo)
 const dispatch = useDispatch()
   //Useffect to run device information
  useEffect(() => {
   // Create an instance of the deviceInformation class
   const fetchDeviceInfo = async () => {
    try {
-    let deviceInfo = device.deviceInfo
+     let info = device.getInfo()
      let uptime = device.uptime
-    dispatch(SET_DEVICE_INFO(deviceInfo))
+    dispatch(SET_DEVICE_INFO(info))
     dispatch(SET_UPTIME(uptime))
+    setDeviceInfo({
+      deviceInfo:info,
+      uptime:uptime
+    })
     
     // console.log("deviceInfo: "+ JSON.stringify(device.deviceInfo))
     
@@ -40,7 +44,7 @@ const dispatch = useDispatch()
 
   
 },[]); // Pass an empty array to indicate that the effect should only run once
-
+console.log("deviceInfo: "+ JSON.stringify(deviceInfo))
 // console.log("deviceInfo: "+ JSON.stringify(deviceInfo))
   // Return the JSX element that renders the component
   return (

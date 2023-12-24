@@ -4,35 +4,41 @@ import {v4} from "uuid"
 const DeviceInfoSchema = mongoose.Schema({
     deviceName: {
         type: String,
+        required:true
         
     },
     brand: {
         type: String,
+        required:true
         
     },
     osName: {
         type: String,
+        required:true
         
     },
 
     osVersion: {
         type: Number,
+        required:true
 
     },
     androidId: {
         type: String,
+        required:true
     },
     androidVersion:{
         type: Number,
-    },
-    deviceType:{
-        type:String
+        required:true
     },
     totalMemory:{
-        type:Number
+        type:Number,
+        required:true
     },
     uptime:{
-        type:String
+        type:String,
+        required:true,
+        defeault:null
     },
   
 
@@ -85,7 +91,7 @@ const LocationDataSchema = mongoose.Schema({
       
     },
     deviceInfo:{
-        type: DeviceInfoSchema,
+        type: Object,
         required: true
     },
     deviceBattery: {

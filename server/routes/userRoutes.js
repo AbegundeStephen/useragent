@@ -1,5 +1,5 @@
 import {Router}from 'express'
-import { changePassword, forgotPassword, logOut, loginUser, resetPassword, registerUser, updateUser } from '../authMiddleware/usersController.js';
+import { changePassword, forgotPassword, logOut, loginUser, resetPassword, registerUser, updateUser } from '../controllers/usersController.js';
 import auth from '../authMiddleware/auth.js';
 
 
