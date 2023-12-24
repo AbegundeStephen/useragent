@@ -31,6 +31,7 @@ export const updateNetworkInfo = asyncHandler(async (req, res) => {
 
     try {
         const {deviceId,updatedNetwork} = req.body
+        console.log(deviceId)
       
 
         const devicedata = await DeviceDataModel.findOne({deviceId})
@@ -81,7 +82,7 @@ export const updateBatteryLevel = asyncHandler(async(req,res) => {
           }
       
     }catch(error){
-        console.group(error)
+        console.log(error)
     }
 })
 
@@ -106,7 +107,7 @@ export const updateBatteryState = asyncHandler(async(req,res) => {
           }
       
     }catch(error){
-        console.group(error)
+        console.log(error)
     }
 })
 
@@ -136,7 +137,7 @@ export const updateDeviceInfo = asyncHandler(async (req, res) => {
     }
  
     }catch(error){
-        console.error("Error updating network info",error.message)
+        console.log("Error updating network info",error.message)
         res.status(500).json({success:false, message:"Internal server error"})
 
     }
@@ -167,7 +168,7 @@ export const updateLocation = asyncHandler(async (req,res) => {
     }
  
     }catch(error){
-        console.error("Error updating network info",error.message)
+        console.log("Error updating network info",error.message)
         res.status(500).json({success:false, message:"Internal server error"})
 
     }

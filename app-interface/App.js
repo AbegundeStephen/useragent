@@ -7,9 +7,6 @@ import DeviceInfo from './src/components/DeviceInfo.js';
 import NetworkInfo from './src/components/NetworkInfo.js';
 import LocationInfo from "./src/components/LocationInfo.js"
 import BatteryStatus from './src/components/Battery.js';
-import { store,persistor } from './redux/store.js';
-import { Provider } from 'react-redux';
-import { PersistGate } from 'redux-persist/integration/react';
 import { useDispatch,useSelector } from 'react-redux';
 import { selectDeviceNetwork } from './redux/networkSlice.js';
 import { SET_ID } from './redux/deviceIdSlice.js';
@@ -28,10 +25,10 @@ import { selectDeviceInfo } from './redux/deviceInfoSlice.js';
 
  const dispatch = useDispatch()
 
- console.log("deviceLocation from redux: "+ JSON.stringify(deviceLocation))
- console.log("deviceNetwork from redux: "+ JSON.stringify(deviceNetwork))
- console.log("deviceBattery from redux: "+ JSON.stringify(deviceBattery))
- console.log("deviceInfo from redux: "+ JSON.stringify(deviceInfo))
+//  console.log("deviceLocation from redux: "+ JSON.stringify(deviceLocation))
+//  console.log("deviceNetwork from redux: "+ JSON.stringify(deviceNetwork))
+//  console.log("deviceBattery from redux: "+ JSON.stringify(deviceBattery))
+//  console.log("deviceInfo from redux: "+ JSON.stringify(deviceInfo))
 
 
 //useEffect to run initial data posting to the server
@@ -88,7 +85,7 @@ import { selectDeviceInfo } from './redux/deviceInfoSlice.js';
   deviceBattery:deviceBattery
 }
 
-console.log("Data"+JSON.stringify(data,null,2))
+// console.log("Data"+JSON.stringify(data,null,2))
 
   return (
     <SafeAreaView style={styles.container}>

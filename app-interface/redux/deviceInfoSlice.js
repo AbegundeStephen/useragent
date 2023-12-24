@@ -22,5 +22,5 @@ const deviceInfoSlice = createSlice({
     }
 })
 export const {SET_DEVICE_INFO,SET_UPTIME} = deviceInfoSlice.actions
-export const selectDeviceInfo = (state) =>  state.deviceInfo.deviceInfo
+export const selectDeviceInfo = (state) =>  state.deviceInfo.deviceInfo.deviceInfo
 export default deviceInfoSlice.reducer

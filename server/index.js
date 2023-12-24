@@ -51,7 +51,7 @@ app.use(error)
     })
     .then(() => {
         server.listen(PORT, () => {
-            console.log(`Server listening on http://localhost:${PORT}`)
+            console.log(`Server listening on https://useragent-api.onrender.com`)
         })
     })
     .catch((error) => {

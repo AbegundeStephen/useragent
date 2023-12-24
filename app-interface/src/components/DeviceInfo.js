@@ -28,7 +28,7 @@ const dispatch = useDispatch()
     dispatch(SET_DEVICE_INFO(deviceInfo))
     dispatch(SET_UPTIME(uptime))
     
-    console.log("deviceInfo: "+ JSON.stringify(device.deviceInfo))
+    // console.log("deviceInfo: "+ JSON.stringify(device.deviceInfo))
     
 
     }catch(error) {
@@ -41,7 +41,7 @@ const dispatch = useDispatch()
   
 },[]); // Pass an empty array to indicate that the effect should only run once
 
-console.log("deviceInfo: "+ JSON.stringify(deviceInfo))
+// console.log("deviceInfo: "+ JSON.stringify(deviceInfo))
   // Return the JSX element that renders the component
   return (
     <>

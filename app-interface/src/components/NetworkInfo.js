@@ -49,7 +49,7 @@ useEffect(() => {
   //   netInfo.unsubscribeFromNetworkChanges(sub)
   // }
  },[net.networkState])
- console.log("deviceNetwork: "+ JSON.stringify(deviceNetwork))
+//  console.log("deviceNetwork: "+ JSON.stringify(deviceNetwork))
   return (
     <View style={styles.container}>
       <Entypo name="network" size={23} color="red"/>
