@@ -45,7 +45,7 @@ app.use(error)
  const PORT = process.env.PORT
 
  mongoose
- .connect("mongodb://localhost:27017/user-agent", 
+ .connect(process.env.MONGO_URL, 
     {
         useNewUrlParser: true, 
         useUnifiedTopology: true
