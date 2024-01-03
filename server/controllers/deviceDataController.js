@@ -35,7 +35,7 @@ export const updateNetworkInfo = asyncHandler(async (req, res) => {
       
 
         const devicedata = await DeviceDataModel.findOne({deviceId})
-        console.log("devicedata", devicedata)
+    
         if(!devicedata) {
             res.status(404)
             throw Error("No Device Data matches the provided id")
@@ -44,8 +44,6 @@ export const updateNetworkInfo = asyncHandler(async (req, res) => {
 
         const newNetInfo = await DeviceDataModel.updateOne({deviceId}, {$set:{deviceNetwork:updatedNetwork}},{new:true, runValidators: true,})
              if (newNetInfo.modifiedCount > 0) {
-                console.log("Network Info Succesfully Updated",newNetInfo)
-                io.emit("dataUpdate", {deviceId,updatedNetwork})
                 res.status(200).json({success:true,message:"Network state updated succesfully"})
         
         
@@ -75,7 +73,6 @@ export const updateBatteryLevel = asyncHandler(async(req,res) => {
         if (result.modifiedCount > 0) {
             // Emit socket event for real-time update
             io.emit('dataUpdate', { deviceId,batteryLevel});
-            console.log("Battery Level Succesfully Updated",result)
             res.status(200).json({ success: true, message: 'Battery level updated successfully' });
           } else {
             res.status(404).json({ success: false, message: 'Device not found' });
@@ -100,7 +97,6 @@ export const updateBatteryState = asyncHandler(async(req,res) => {
         if (result.modifiedCount > 0) {
             // Emit socket event for real-time update
             io.emit('dataUpdate', { deviceId,batteryState });
-            console.log("Battery state Succesfully Updated",result)
             res.status(200).json({ success: true, message: 'Battery state updated successfully' });
           } else {
             res.status(404).json({ success: false, message: 'Device not found' });
@@ -125,9 +121,7 @@ export const updateDeviceInfo = asyncHandler(async (req, res) => {
 
         const newDeviceInfo = await DeviceDataModel.updateOne({deviceId}, {$set:{deviceInfo:updatedDeviceInfo}},{new:true, runValidators: true,upsert:true})
         if (newDeviceInfo) {
-            console.log("Device Info Succesfully Updated")
             io.emit("updateLocation", {deviceId,newDeviceInfo}, () => {
-                console.log("Socket is working",deviceId,newDeviceInfo.deviceInfo)
             })
              res.status(200).json({newDeviceInfo})
         
@@ -158,9 +152,8 @@ export const updateLocation = asyncHandler(async (req,res) => {
 
         const newLocation = await DeviceDataModel.updateOne({deviceId}, {$set:{"deviceLocation.deviceLocation":updatedLocation.deviceLocation, "deviceLocation.address":updatedLocation.address}},{new:true, runValidators: true})
         if (newLocation.modifiedCount) {
-            console.log("Device Location Succesfully Updated")
             io.emit("dataUpdate", {deviceId,updatedLocation})
-            res.status(200).json({newLocation})
+            res.status(200).json({success:true,message:"Location updated successfully"})
         
         
     } else {
@@ -179,8 +172,7 @@ export const fetchDeviceData = asyncHandler( async (req, res) => {
     try {
         const deviceId = req.body
         const deviceData = await DeviceDataModel.findOne({deviceId})
-        console.log("Retrieved Data for the provided id is", deviceData)
-        res.status(200).json({result})
+        res.status(200).json({success:true,message:"Device data fetched successfully"})
     }catch(error) {
         console.error("Error retrieving device data", error.message)
         throw error

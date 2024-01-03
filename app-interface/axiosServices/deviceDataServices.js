@@ -61,7 +61,6 @@ export const updateLocationInfo = async (data) => {
 export const updateNetworkInfo = async (data) => {
     try {
       const response = await axios.patch(`${serverUrl}/api/v1/useragent/devices/updatenetinfo`,data)
-      console.log(response)
       if (response.status === 200) {
         socket.emit('networkupdated', response.data)
         return response.data.message
@@ -77,7 +76,6 @@ export const updateNetworkInfo = async (data) => {
 export const updateBatteryLevel = async (data) => {
     try {
       const response = await axios.patch(`${serverUrl}/api/v1/useragent/devices/updatebatterylevel`,data)
-      console.log(response)
       if (response.status=== 200) {
         socket.emit('dataUpdate', response.data)
         return response.data.message
@@ -93,7 +91,6 @@ export const updateBatteryLevel = async (data) => {
 export const updateBatteryState = async (data) => {
     try {
       const response = await axios.patch(`${serverUrl}/api/v1/useragent/devices/updatebatterystate`,data)
-      console.log(response)
       if (response.status === 200) {
         socket.emit('dataUpdate', response.data)
         return response.data.message
