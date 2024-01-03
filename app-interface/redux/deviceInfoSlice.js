@@ -3,7 +3,7 @@ import { createSlice } from "@reduxjs/toolkit";
 const initialState = {
     isFetched:false,
     infoData:{
-    deviceInfo:{},
+    deviceInfo:null,
     uptime:null
     }
 }

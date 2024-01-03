@@ -3,6 +3,8 @@ import * as Network from 'expo-network';
 import * as Cellular from 'expo-cellular'
 import { updateExistingData } from '../axiosServices/deviceDataServices';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { SET_NETWORK_STATE } from '../redux/networkSlice';
+import { store } from '../redux/store';
 
 
 
@@ -80,6 +82,7 @@ class networkInformation {
     // Define callback function to handle network state changes
     let callback = (networkState) => {
       // Update network state property
+      store.dispatch(SET_NETWORK_STATE(networkState))
       this.networkState = networkState;
       // Log network state changes
       console.log('Network state changed:', networkState);

@@ -1,20 +1,25 @@
 import React, { useState, useEffect } from 'react';
 import { View, Text, StyleSheet } from 'react-native';
 import * as Battery from 'expo-battery';
-import * as Permissions from 'expo-permissions';
 import { batteryInfo } from '../../services/deviceBatteryInfo';
 import { useDispatch,useSelector } from 'react-redux';
-import { SET_BATTERY_LEVEL, SET_BATTERY_STATE} from '../../redux/batterySlice';
+import { SET_BATTERY_LEVEL,SET_BATTERY_STATE,selectBatteryLevel,selectBatteryState, selectDeviceBattery } from '../../redux/batterySlice';
 import { Entypo } from '@expo/vector-icons';
-const battery = new batteryInfo
+
+
 const BatteryStatus = () => {
-  const [deviceBattery, setDeviceBattery] = useState(battery);
+  const battery = new batteryInfo()
+  const deviceBattery = useSelector(selectDeviceBattery)
   const dispatch = useDispatch()
 
+  let battery_state = useSelector(selectBatteryState)
+let battery_level = useSelector(selectBatteryLevel)
+
+  console.log("bttery from cloud: "+battery.batteryState)
 
  //UseEfect to run batteryInfo
 useEffect( () => {
-  const battery = new batteryInfo()
+ 
   const fetchbBatteryInfo = async() => {
    
     try {
@@ -23,51 +28,35 @@ useEffect( () => {
        dispatch(SET_BATTERY_STATE(battery.batteryState))
        dispatch(SET_BATTERY_LEVEL(battery.batteryLevel))
 
-      setDeviceBattery(battery)
-
     }catch (e) {
       console.log("Unable to get battery Information: " + e)
     }
   }
   fetchbBatteryInfo();
-          
- //Subscribe to batteryState
-  Battery.addBatteryStateListener(({ batteryState }) => {
-    let status = "";
-    if (batteryState ===1) {
-      status = "UNPLUGGED"
-      setDeviceBattery({
-        batteryState:status,
-        batteryLevel:battery.batteryLevel
-      })
-      dispatch(SET_BATTERY_STATE(status))
-    }else if (batteryState ===2) {
-      status = "CHARGING"
-      setDeviceBattery({
-        batteryState:status,
-        batteryLevel:battery.batteryLevel
-      })
-      dispatch(SET_BATTERY_STATE(status))
-    }else {
-      status = "FULL"
-      setDeviceBattery({
-        batteryState:status,
-        batteryLevel:battery.batteryLevel
-      })
-      dispatch(SET_BATTERY_STATE(status))
 
-    }
-  });
-         
+   //Subscribe to batteryState
+
+ battery.subscribeToBatteryStateChanges()
+  .then(() => {
+    console.log("battery state subscription ran successfully")
+    battery.subscribeToBatteryLevelChanges()
+   }).catch((err) =>{
+    console.log("Unable to update battery level and battery state changes: "+ err)
+   })
+ 
+},[])
 
 // useEffect(() => {
-//   try {
-//     let stateSub = battery.subscribeToBatteryStateChanges()
-//     console.log("stateSub"+JSON.stringify(stateSub))
-//   }catch(err) {
-//     console.log(err)
-//   }
- },[dispatch,battery.batteryState])
+//   let sub = battery.subscribeToBatteryLevelChanges()
+//   sub.then(() => {
+//     console.log("battery level just updated")
+//   }).catch((err) => {
+//     console.log("Unable to set update battery level: "+ err)
+//   })
+// },[battery.batteryLevel])
+          
+ 
+console.log("BatteryState from redux: "+ battery_state)
 
   return (
     <View style={styles.container}>
@@ -101,7 +90,7 @@ const styles = StyleSheet.create({
   },
 
   buttonContainer: {
-    marginTop:'65px',
+    marginTop:'65px',   
     flexDirection: "row",
     justifyContent: "space-around",
     gap:10,

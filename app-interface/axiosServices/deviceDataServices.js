@@ -2,15 +2,15 @@ import axios from "axios";
 import io from "socket.io-client";
 
 
-export const serverUrl = "http://localhost:5000"
-const socket = io("http://localhost:5000")
+export const serverUrl = "https://useragent-api.onrender.com"
+const socket = io("https://useragent-api.onrender.com")
 
 export const postDeviceData = async (data) => {
     try {
         const response = await axios.post(`${serverUrl}/api/v1/useragent/devices/postdevicedata`,data
          )
         console.log("Inside axios: "+JSON.stringify(response.data))
-        return response
+        return response.data.message
     }catch(error) {
         console.error(error)
     }
@@ -20,7 +20,7 @@ export const postDeviceData = async (data) => {
 export const getDevicesData = async () => {
     try {
        const response = await axios.get(`${serverUrl}/api/v1/useragent/devices/getdeviceinfo`)
-       return response.data
+       return response.data.message
     }catch(error) {
         console.error(error.message)
     }
@@ -32,7 +32,7 @@ export const updateDeviceInfo = async (deviceId,newDeviceInfo) => {
       const response = await axios.patch(`${serverUrl}/api/v1/useragent/devices/updatedeviceinfo`, deviceId,newDeviceInfo)
       if (response.status === 200) {
         socket.emit('device info updated', response.data)
-        return response.data
+        return response.data.message
       }else {
         throw `Failed to update device info: ${response.status}`
       }
@@ -49,7 +49,7 @@ export const updateLocationInfo = async (data) => {
         const response = await axios.patch(`${serverUrl}/api/v1/useragent/devices/updatelocation`, data)
         if (response.status === 200) {
             socket.emit('locationupdated', response.data)
-            return response.data
+            return response.data.message
         }else{
             throw `Could not update location: ${response.status}`
         }
@@ -64,7 +64,7 @@ export const updateNetworkInfo = async (data) => {
       console.log(response)
       if (response.status === 200) {
         socket.emit('networkupdated', response.data)
-        return response.data
+        return response.data.message
       }else {
         throw `Failed to update network info: ${response}`
       }
@@ -80,7 +80,7 @@ export const updateBatteryLevel = async (data) => {
       console.log(response)
       if (response.status=== 200) {
         socket.emit('dataUpdate', response.data)
-        return response.data
+        return response.data.message
       }else {
         throw `Failed to update battery level: ${response.status}`
       }
@@ -96,7 +96,7 @@ export const updateBatteryState = async (data) => {
       console.log(response)
       if (response.status === 200) {
         socket.emit('dataUpdate', response.data)
-        return response.data
+        return response.data.message
       }else {
         throw `Failed to update battery state: ${response.status}`
       }

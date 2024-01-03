@@ -53,7 +53,7 @@ class locationInformation {
       // Assign location to property
       this.deviceLocation = location
       // Log location coordinates
-      
+      await this.getDeviceAddress()
       return location
     } catch (error) {
       // Handle error

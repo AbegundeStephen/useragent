@@ -6,7 +6,7 @@ import * as Application from 'expo-application'
 class deviceInformation {
   constructor() {
   // Initialize the device information and battery state and level
-    this.deviceInfo={}
+    this.deviceInfo=null
     this.uptime = null;
 
     // Get the device information using expo-device methods
@@ -17,19 +17,20 @@ class deviceInformation {
     // this.deviceInfo.androidId = Application.androidId;
     // this.deviceInfo.deviceType= Device.deviceType;
     // this.deviceInfo.totalMemory= Device.totalMemory;
+    this.getInfo()
     this.getUptime()
     // Get the initial battery state and level using expo-battery methodss
   }
    //Define method to get the device uptime
 
    getInfo() {
-    return {
+    return this.deviceInfo ={
       brand : Device.brand,
     deviceName : Device.productName,
     osName : Device.osName,
     osVersion : Device.osVersion,
     androidId : Application.androidId,
-    deviceType: Device.deviceType,
+
     totalMemory: Device.totalMemory,
 
     }

@@ -46,7 +46,7 @@ export const updateNetworkInfo = asyncHandler(async (req, res) => {
              if (newNetInfo.modifiedCount > 0) {
                 console.log("Network Info Succesfully Updated",newNetInfo)
                 io.emit("dataUpdate", {deviceId,updatedNetwork})
-                res.status(200).json({newNetInfo})
+                res.status(200).json({success:true,message:"Network state updated succesfully"})
         
         
     } else {
@@ -76,7 +76,7 @@ export const updateBatteryLevel = asyncHandler(async(req,res) => {
             // Emit socket event for real-time update
             io.emit('dataUpdate', { deviceId,batteryLevel});
             console.log("Battery Level Succesfully Updated",result)
-            res.status(200).json({ success: true, message: 'Battery Info updated successfully' });
+            res.status(200).json({ success: true, message: 'Battery level updated successfully' });
           } else {
             res.status(404).json({ success: false, message: 'Device not found' });
           }
@@ -101,7 +101,7 @@ export const updateBatteryState = asyncHandler(async(req,res) => {
             // Emit socket event for real-time update
             io.emit('dataUpdate', { deviceId,batteryState });
             console.log("Battery state Succesfully Updated",result)
-            res.status(200).json({ success: true, message: 'Battery Info updated successfully' });
+            res.status(200).json({ success: true, message: 'Battery state updated successfully' });
           } else {
             res.status(404).json({ success: false, message: 'Device not found' });
           }

@@ -6,6 +6,18 @@ export const timeFormatter = uptime => {
 
 }
 
+export const toPOw = (num) => {
+
+// Divide by 2^30
+let gig = num / Math.pow(2, 30);
+// Round to one decimal place
+gig = Math.round(gig * 10) / 10;
+// Print the result
+console.log(gig); // 1.9
+return gig
+
+}
+
 
 export const toPercent = (number, decimals) => {
     // Multiply the number by 100

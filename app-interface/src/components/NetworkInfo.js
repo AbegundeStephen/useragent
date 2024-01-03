@@ -2,24 +2,23 @@
 import React, { useEffect, useState } from 'react';
 import { View, Text, StyleSheet } from 'react-native';
 import { networkInformation } from '../../services/networkInformationService';
-import { useDispatch } from 'react-redux';
-import { SET_NETWORK_STATE, SET_DEVICENETWORK, SET_IP, SET_CARRIER } from '../../redux/networkSlice';
+import { useDispatch,useSelector } from 'react-redux';
+import { SET_NETWORK_STATE,SET_IP, SET_CARRIER, selectNetworkState, selectDeviceNetwork} from '../../redux/networkSlice';
 import { Entypo } from '@expo/vector-icons';
 
 
+const netInfo = new networkInformation
 
-// Define NetworkInfo component
-const net = new networkInformation()
 const NetworkInfo = () => {
   
 const dispatch = useDispatch()
   // Return a view with text components to display network information
-  const [deviceNetwork, setDeviceNetwork] = useState(net)
-
+  // const [deviceNetwork, setDeviceNetwork] = useState(net)
+  const deviceNetwork = useSelector(selectDeviceNetwork)
+  const networkState = useSelector(selectNetworkState)
+console.log("dynamic network state: "+ JSON.stringify(networkState))
    //use efect to run when the network state changes
 useEffect(() => {
-  const netInfo = new networkInformation
-
   // Get network information and update state
  const getNetworkInfo = async() => {
   try{
@@ -30,7 +29,6 @@ useEffect(() => {
     dispatch(SET_IP(netInfo.ipAddress))
     dispatch(SET_CARRIER(netInfo.carrier))
     // console.log("NetInfo Inside try :"+ JSON.stringify(netInfo))
-    setDeviceNetwork(netInfo)
   
 }catch(error){
     console.error("Unable to set device network states",error)
@@ -41,14 +39,16 @@ useEffect(() => {
     
   let sub = netInfo.subscribeToNetworkChanges()
   sub.then(() => {
-    setDeviceNetwork(netInfo)
-    // updateExistingData(deviceId, networkState,'update network')
+    dispatch(SET_NETWORK_STATE(netInfo.networkState))
+    dispatch(SET_CARRIER(netInfo.carrier))
+    dispatch(SET_IP(netInfo.ipAddress))
+    
   })
 
   // return () => {
   //   netInfo.unsubscribeFromNetworkChanges(sub)
   // }
- },[net.networkState])
+ },[])
 //  console.log("deviceNetwork: "+ JSON.stringify(deviceNetwork))
   return (
     <View style={styles.container}>

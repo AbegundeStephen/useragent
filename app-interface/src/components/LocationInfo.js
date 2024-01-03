@@ -3,7 +3,7 @@ import React, { useEffect, useState } from 'react';
 import { View, Text, StyleSheet } from 'react-native';
 import { locationInformation } from '../../services/locationService';
 import { useDispatch } from 'react-redux';
-import { SET_ADRRESS, SET_LOCATION} from '../../redux/locationSlice';
+import { SET_ADRRESS,SET_LOCATION } from '../../redux/locationSlice';
 import { Entypo } from '@expo/vector-icons';
 const location = new locationInformation()
 
@@ -27,7 +27,7 @@ useEffect( () => {
      
 
     }catch(error) {
-      console.error("Couldn't fetch location data", error.message)
+      console.error("Couldn't fetch location data", error)
     }
     
   }

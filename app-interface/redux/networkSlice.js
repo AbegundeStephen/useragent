@@ -40,5 +40,6 @@ export const {SET_DEVICENETWORK,SET_NETWORK_STATE,SET_CARRIER,SET_IP,UPDATE_STAT
 
 export const selectIsFetched = (state) => state.deviceNetwork.isFetched
 export const selectDeviceNetwork = (state) => state.deviceNetwork.deviceNetwork
+export const selectNetworkState = (state) => state.deviceNetwork.deviceNetwork.networkState
 
 export default networkSlice.reducer;

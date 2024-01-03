@@ -1,126 +1,40 @@
-import mongoose from 'mongoose'
-
-mongoose
-.connect("mongodb://localhost:27017/user-agent", {
-    useNewUrlParser:true,
-    useUnifiedTopology:true,
-});
-
-const DeviceInfoSchema = mongoose.Schema({
-    deviceId:{
-        type: String,
-        required: true
-    },
-
-    deviceName: {
-        type: String,
-        required: true
-    },
-    manufacturer: {
-        type: String,
-        required: true
-    },
-    model: {
-        type: String,
-        required: true
-    },
-
-    batteryLevel: {
-        type: Number,
-
-    },
-    batteryStatus: {
-        type: String,
-    },
-
-    isCharging: {
-        type: Boolean,
-    },
-    isBatterySaverMode: {
-        type: Boolean,
-        required: true
-    },
-
-    isLowPowerMode: {
-        type: Boolean,
-        required: true
-    },
+// pages/api/data.js
+import db from '../../../db.js'
+import DeviceDataModel from '../../../../server/models/deviceModel.js'
+import {Server} from 'socket.io-client'
 
 
-})
+export const config = {
+  api: {
+    bodyParser: false,
+  },
+};
 
+const ioHandler = (req, res) => {
+  if (!res.socket.server.io) {
+    console.log('Setting up socket.io');
+    const io = new Server(res.socket.server);
+    io.on('connection', (socket) => {
+      console.log('Client connected');
+    });
+    res.socket.server.io = io;
+  }
 
-const LocationDataSchema = mongoose.Schema({
-    latitude: {
-        type: Number,
-        required:  true,
-    },
+  return app(req, res);
+};
 
-    longitude:{
-        type: Number,
-        required: true,
-    },
+const app = async (req, res) => {
+  await db;
 
-    accuracy: {
-        type: Number,
-    },
+  try {
+    const data = await YourModel.find();
+    res.status(200).json(data);
+    res.socket.server.io.emit('dataUpdate', data);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: 'Internal Server Error' });
+  }
+};
 
-    timestamps: {
-        type: Date,
-        default:Date.now,
-    },
+export default ioHandler;
 
-    })
-
- const NetworkDataSchema = mongoose.Schema({
-    isConnected:{
-        type: Boolean,
-        required: true,
-    },
-
-    connectionType:{
-        type: String,
-    },
-
-    cellularSignalStrength:{
-        type: Number
-    },
-
-    wifiSignalStrength: {
-        type: Number
-    }
- })
-
-
- const DeviceDataModel = mongoose.Schema({
-    deviceId :{
-        type: mongoose.Schema.Types.ObjectId
-        
-    },
-    deviceInfo:{
-        type: DeviceInfoSchema,
-        required: true
-    },
-    deviceLocation:{
-        type: LocationDataSchema,
-        required: true
-    },
-     deviceNetwork: {
-        type: NetworkDataSchema,
-        required: true
-     }
- },{timestamps:true})
-
-
- const DataModel = mongoose.model("Devices", DeviceDataModel)
-
-
- export default async (req, res) => {
-    try {
-        const deviceData = await DataModel.find({});
-        res.status(200).json({deviceData});
-    }catch(error) {
-        console.log("Error Fetching data"), error
-        res.status(500).json({messsage:"Internal Server Error"})
-    }
- }

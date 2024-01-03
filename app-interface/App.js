@@ -13,7 +13,7 @@ import { SET_ID } from './redux/deviceIdSlice.js';
 import { LinearGradient } from 'expo-linear-gradient'
 import { selectDeviceLocation } from './redux/locationSlice.js';
 import { selectDeviceBattery } from './redux/batterySlice.js';
-import { selectDeviceInfo, selectUptime } from './redux/deviceInfoSlice.js';
+import { selectDeviceInfo,selectUptime } from './redux/deviceInfoSlice.js';
 
 
  function App() {
@@ -27,10 +27,9 @@ import { selectDeviceInfo, selectUptime } from './redux/deviceInfoSlice.js';
 
  const dispatch = useDispatch()
 
-//  console.log("deviceLocation from redux: "+ JSON.stringify(deviceLocation))
 //  console.log("deviceNetwork from redux: "+ JSON.stringify(deviceNetwork))
 //  console.log("deviceBattery from redux: "+ JSON.stringify(deviceBattery))
- console.log("deviceInfo from redux: "+ JSON.stringify(deviceInfo))
+//  console.log("deviceInfo from redux: "+ JSON.stringify(deviceInfo))
 
 
 //useEffect to run initial data posting to the server
@@ -41,12 +40,10 @@ import { selectDeviceInfo, selectUptime } from './redux/deviceInfoSlice.js';
   const uploadDeviceData = async () => {
     try {
       // const storedDeviceId =  localStorage.getItem("deviceId")
-      const mobileId = await AsyncStorage.getItem("deviceId")
-      const deviceId = localStorage.getItem("deviceId")
+      const mobileId = await AsyncStorage.getItem("mobileId")
       console.log("MobileId",mobileId)
-      if (mobileId ||deviceId) {
+      if (mobileId) {
         console.log("Device data already posted")
-        
       }
       else {
         console.log('posting Initial Data')
@@ -62,10 +59,11 @@ import { selectDeviceInfo, selectUptime } from './redux/deviceInfoSlice.js';
         }
         console.log("Data Inside Post:"+JSON.stringify(data))
         const response = await postDeviceData(data);
-        console.log("Post",response.data)
-        if (response != undefined){
-        await AsyncStorage.setItem("mobileId",response.result.deviceId)
-        localStorage.setItem("deviceId", response.result.deviceId )  
+        console.log("Post",JSON.stringify(response,null,2))
+        if (response.status === 200){
+          dispatch(SET_ID(response.data.result.deviceId))
+        await AsyncStorage.setItem("mobileId",response.data.result.deviceId)
+        // localStorage.setItem("deviceId", response.result.deviceId )  
         } 
       }
 
