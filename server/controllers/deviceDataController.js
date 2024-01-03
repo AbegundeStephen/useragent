@@ -171,8 +171,9 @@ export const fetchDeviceData = asyncHandler( async (req, res) => {
 
     try {
         const deviceId = req.body
-        const deviceData = await DeviceDataModel.findOne({deviceId})
+        const deviceData = await DeviceDataModel.findOne(deviceId)
         res.status(200).json({success:true,message:"Device data fetched successfully"})
+        return deviceData
     }catch(error) {
         console.error("Error retrieving device data", error.message)
         throw error
