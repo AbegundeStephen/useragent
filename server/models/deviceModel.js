@@ -86,10 +86,9 @@ const LocationDataSchema = mongoose.Schema({
 
 
  const DeviceDataModel = mongoose.Schema({
-    deviceId :{
-        type: String,
+    deviceId :String,
       
-    },
+
     deviceInfo:{
         type: Object,
         required: true
