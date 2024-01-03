@@ -13,9 +13,8 @@ const BatteryStatus = () => {
   const dispatch = useDispatch()
 
   let battery_state = useSelector(selectBatteryState)
-let battery_level = useSelector(selectBatteryLevel)
+  let battery_level = useSelector(selectBatteryLevel)
 
-  console.log("bttery from cloud: "+battery.batteryState)
 
  //UseEfect to run batteryInfo
 useEffect( () => {
@@ -36,8 +35,8 @@ useEffect( () => {
 
    //Subscribe to batteryState
 
- battery.subscribeToBatteryStateChanges()
-  .then(() => {
+ let sub = battery.subscribeToBatteryStateChanges()
+  sub.then(() => {
     console.log("battery state subscription ran successfully")
     battery.subscribeToBatteryLevelChanges()
    }).catch((err) =>{
@@ -46,14 +45,14 @@ useEffect( () => {
  
 },[])
 
-// useEffect(() => {
-//   let sub = battery.subscribeToBatteryLevelChanges()
-//   sub.then(() => {
-//     console.log("battery level just updated")
-//   }).catch((err) => {
-//     console.log("Unable to set update battery level: "+ err)
-//   })
-// },[battery.batteryLevel])
+useEffect(() => {
+  let sub = battery.subscribeToBatteryLevelChanges()
+  sub.then(() => {
+    console.log("battery level just updated")
+  }).catch((err) => {
+    console.log("Unable to set update battery level: "+ err)
+  })
+},[battery.batteryLevel])
           
  
 console.log("BatteryState from redux: "+ battery_state)

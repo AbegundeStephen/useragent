@@ -16,7 +16,6 @@ const dispatch = useDispatch()
   // const [deviceNetwork, setDeviceNetwork] = useState(net)
   const deviceNetwork = useSelector(selectDeviceNetwork)
   const networkState = useSelector(selectNetworkState)
-console.log("dynamic network state: "+ JSON.stringify(networkState))
    //use efect to run when the network state changes
 useEffect(() => {
   // Get network information and update state

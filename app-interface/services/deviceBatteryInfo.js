@@ -109,7 +109,7 @@ console.log("Inside  battery state onchange handler: " + this.batteryState)
           deviceId:deviceId,
           batteryState:this.batteryState
         }
-     updateExistingData(data,'update batterystate')
+    await updateExistingData(data,'update batterystate')
 }
 }
 

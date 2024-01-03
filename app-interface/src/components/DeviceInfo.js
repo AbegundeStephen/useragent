@@ -30,7 +30,6 @@ const dispatch = useDispatch()
     dispatch(SET_DEVICE_INFO(device.deviceInfo))
     dispatch(SET_UPTIME(device.uptime))
     
-    console.log("deviceInfo: "+ JSON.stringify(device.deviceInfo))
     
 
     }catch(error) {

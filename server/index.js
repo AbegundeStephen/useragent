@@ -44,13 +44,13 @@ app.use(error)
  const PORT = process.env.PORT
 
  mongoose
- .connect(process.env.MONGO_URL, 
+ .connect("mongodb://localhost:27017", 
     {
         useNewUrlParser: true, 
         useUnifiedTopology: true
     })
     .then(() => {
-        server.listen(PORT,()=> {
+        server.listen(PORT,() => {
             console.log(`Server listening on http://localhost:${PORT}`)
         })
     })

@@ -2,7 +2,7 @@ import axios from "axios";
 import io from "socket.io-client";
 
 
-export const serverUrl = "https://useragent-api.onrender.com"
+export const serverUrl = "http://localhost:5000"
 const socket = io("https://useragent-api.onrender.com")
 
 export const postDeviceData = async (data) => {
@@ -63,7 +63,7 @@ export const updateNetworkInfo = async (data) => {
       const response = await axios.patch(`${serverUrl}/api/v1/useragent/devices/updatenetinfo`,data)
       if (response.status === 200) {
         socket.emit('networkupdated', response.data)
-        return response.data.message
+        return response.data
       }else {
         throw `Failed to update network info: ${response}`
       }

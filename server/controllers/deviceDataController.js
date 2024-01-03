@@ -44,7 +44,8 @@ export const updateNetworkInfo = asyncHandler(async (req, res) => {
 
         const newNetInfo = await DeviceDataModel.updateOne({deviceId}, {$set:{deviceNetwork:updatedNetwork}},{new:true, runValidators: true,})
              if (newNetInfo.modifiedCount > 0) {
-                res.status(200).json({success:true,message:"Network state updated succesfully"})
+                res.status(200).json({success:true,message:"Network state updated succesfully",})
+            
         
         
     } else {

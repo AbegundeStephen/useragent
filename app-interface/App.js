@@ -44,6 +44,7 @@ import { selectDeviceInfo,selectUptime } from './redux/deviceInfoSlice.js';
       console.log("MobileId",mobileId)
       if (mobileId) {
         console.log("Device data already posted")
+      // await AsyncStorage.removeItem("mobileId")
       }
       else {
         console.log('posting Initial Data')
