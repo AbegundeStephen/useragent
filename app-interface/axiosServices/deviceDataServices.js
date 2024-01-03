@@ -2,7 +2,7 @@ import axios from "axios";
 import io from "socket.io-client";
 
 
-export const serverUrl = "http://localhost:5000"
+export const serverUrl = "https://useragent-api.onrender.com"
 const socket = io("https://useragent-api.onrender.com")
 
 export const postDeviceData = async (data) => {
