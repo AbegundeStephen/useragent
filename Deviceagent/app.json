@@ -1,11 +1,11 @@
 {
   "expo": {
-    "name": "app-interface",
-    "slug": "app-interface",
+    "name": "useragent",
+    "slug": "useragent",
     "version": "1.0.0",
     "orientation": "portrait",
     "jsEngine": "hermes",
-    "icon": "./assets/icon.png",
+    "icon": "./assets/useradgent-291665.jpg",
     "userInterfaceStyle": "light",
     "splash": {
       "image": "./assets/splash.png",

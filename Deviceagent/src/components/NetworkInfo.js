@@ -15,7 +15,7 @@ const dispatch = useDispatch()
   // Return a view with text components to display network information
   // const [deviceNetwork, setDeviceNetwork] = useState(net)
   const deviceNetwork = useSelector(selectDeviceNetwork)
-  const networkState = useSelector(selectNetworkState)
+  const network_State = useSelector(selectNetworkState)
    //use efect to run when the network state changes
 useEffect(() => {
   // Get network information and update state
@@ -47,7 +47,7 @@ useEffect(() => {
   // return () => {
   //   netInfo.unsubscribeFromNetworkChanges(sub)
   // }
- },[])
+ },[network_State.isConnected])
 //  console.log("deviceNetwork: "+ JSON.stringify(deviceNetwork))
   return (
     <View style={styles.container}>

@@ -51,7 +51,8 @@
     "react-redux": "^9.0.4",
     "redux-persist": "^6.0.0",
     "shortid": "^2.2.16",
-    "socket.io-client": "^4.7.2"
+    "socket.io-client": "^4.7.2",
+    "expo-background-fetch": "~11.3.0"
   },
   "devDependencies": {
     "@babel/core": "^7.20.0",

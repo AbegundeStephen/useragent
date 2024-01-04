@@ -82,13 +82,14 @@ class networkInformation {
     // Define callback function to handle network state changes
     let callback = (networkState) => {
       // Update network state property
-      store.dispatch(SET_NETWORK_STATE(networkState))
+      // store.dispatch(SET_NETWORK_STATE(networkState))
       this.networkState = networkState;
       // Log network state changes
       console.log('Network state changed:', networkState);
     };
     // Add network state listener and return the subscription object
     let newState = await Network.getNetworkStateAsync(callback);
+    store.dispatch(SET_NETWORK_STATE(newState))
     console.log("New network state:", newState);
     let mobileId = await AsyncStorage.getItem("mobileId")
     // let deviceId = localStorage.getItem("deviceId")

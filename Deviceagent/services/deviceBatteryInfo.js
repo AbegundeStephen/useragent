@@ -9,7 +9,7 @@ class batteryInfo {
         this.batteryState = null;
         this.batteryLevel = null;
 
-        // this.getBatteryState();
+        this.getBatteryLevel();
     
         // // Subscribe to battery state and level changes using expo-battery methods
         // this.batteryStateSubscription = this.subscribeToBatteryStateChanges;
@@ -109,40 +109,25 @@ console.log("Inside  battery state onchange handler: " + this.batteryState)
           deviceId:deviceId,
           batteryState:this.batteryState
         }
-    await updateExistingData(data,'update batterystate')
+   updateExistingData(data,'update batterystate')
 }
 }
 
 async subscribeToBatteryLevelChanges() {
-  let deviceId =await AsyncStorage.getItem("mobileId")
-  // let callback = async (batteryLevel) => {
-  //   this.batteryLevel = Math.round(batteryLevel * 100) + '%';;
-  //   store.dispatch(SET_BATTERY_LEVEL(this.batteryLevel))
-  //   if(deviceId){
-  //     let data = {
-  //      deviceId:deviceId,
-  //      batteryLevel:batteryLevel
-  //     }
-  //      updateExistingData(data,'update batterylevel')
-       
-  //    }
-  // }
 Battery.addBatteryLevelListener(({batteryLevel}) => {
-  console.log("Battery level inside sub"+batteryLevel)
-      // this.batteryLevel = batteryLevel
-      // store.dispatch(SET_BATTERY_LEVEL(this.batteryLevel))
+  console.log("Battery level inside sub: "+batteryLevel)
+      this.batteryLevel = batteryLevel
+      store.dispatch(SET_BATTERY_LEVEL(this.batteryLevel))
+    })
+    let deviceId = await AsyncStorage.getItem("mobileId")
       if(deviceId){
         let data = {
          deviceId:deviceId,
-         batteryLevel:batteryLevel
+         batteryLevel:this.batteryLevel
         }
     updateExistingData(data,'update batterylevel')
          
        }
-      //  callback(batteryLevel)
-      
-    })
-
 }
   // // Define a method to unsubscribe from battery state and level changes
   unsubscribe() {

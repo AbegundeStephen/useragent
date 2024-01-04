@@ -38,12 +38,11 @@ useEffect( () => {
  let sub = battery.subscribeToBatteryStateChanges()
   sub.then(() => {
     console.log("battery state subscription ran successfully")
-    battery.subscribeToBatteryLevelChanges()
    }).catch((err) =>{
     console.log("Unable to update battery level and battery state changes: "+ err)
    })
  
-},[])
+},[battery_state])
 
 useEffect(() => {
   let sub = battery.subscribeToBatteryLevelChanges()
@@ -52,7 +51,7 @@ useEffect(() => {
   }).catch((err) => {
     console.log("Unable to set update battery level: "+ err)
   })
-},[battery.batteryLevel])
+},[battery_state,battery_level])
           
  
 console.log("BatteryState from redux: "+ battery_state)
