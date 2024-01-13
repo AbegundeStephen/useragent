@@ -1,6 +1,6 @@
 {
   "expo": {
-    "name": "useragent",
+    "name": "Useragent",
     "slug": "useragent",
     "version": "1.0.0",
     "orientation": "portrait",
@@ -17,7 +17,7 @@
     ],
     "ios": {
       "supportsTablet": true,
-      "bundleIdentifier": "com.abegunde93.appinterface"
+      "bundleIdentifier": "com.abegunde93.useragent"
     },
     "android": {
       "adaptiveIcon": {
@@ -30,7 +30,7 @@
         "android.permission.FOREGROUND_SERVICE",
         "android.permission.ACCESS_BACKGROUND_LOCATION"
       ],
-      "package": "com.abegunde93.appinterface"
+      "package": "com.abegunde93.useragent"
     },
     "web": {
       "favicon": "./assets/favicon.png"
@@ -40,20 +40,21 @@
         "expo-location",
         {
           "locationAlwaysAndWhenInUsePermission": "Allow $(PRODUCT_NAME) to use your location.",
-          "isAndroidBackgroundLocationEnabled":true
+          "isAndroidBackgroundLocationEnabled": true
         }
       ]
     ],
     "extra": {
       "eas": {
-        "projectId": "2f582502-c9d3-46a5-8e1a-db7bd4bc6e6b"
+        "projectId": "0979ad5a-847d-4567-9c28-1e0e72d43e8c"
       }
     },
     "runtimeVersion": {
       "policy": "appVersion"
     },
     "updates": {
-      "url": "https://u.expo.dev/2f582502-c9d3-46a5-8e1a-db7bd4bc6e6b"
-    }
+      "url": "https://u.expo.dev/0979ad5a-847d-4567-9c28-1e0e72d43e8c"
+    },
+    "owner": "abegunde93"
   }
 }

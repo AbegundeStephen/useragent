@@ -7,7 +7,7 @@ import { SET_NETWORK_STATE,SET_IP, SET_CARRIER, selectNetworkState, selectDevice
 import { Entypo } from '@expo/vector-icons';
 
 
-const netInfo = new networkInformation
+const netInfo = new networkInformation()
 
 const NetworkInfo = () => {
   
@@ -47,7 +47,7 @@ useEffect(() => {
   // return () => {
   //   netInfo.unsubscribeFromNetworkChanges(sub)
   // }
- },[network_State.isConnected])
+ },[netInfo.networkState])
 //  console.log("deviceNetwork: "+ JSON.stringify(deviceNetwork))
   return (
     <View style={styles.container}>
