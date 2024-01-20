@@ -100,11 +100,6 @@ class locationInformation {
   // Define method to watch location changes using Location.watchPositionAsync()
   async watchLocation() {
 
-   
-
-
-
-  
     // Define callback function to handle location updates
     // let deviceId = localStorage.getItem("deviceId");
     let callback = async (location) => {

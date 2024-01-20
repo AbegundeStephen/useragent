@@ -171,7 +171,7 @@ export const updateLocation = asyncHandler(async (req,res) => {
 export const fetchDeviceData = asyncHandler( async (req, res) => {
 
     try {
-        const deviceId = req.body
+        const deviceId = req.params.id
         const deviceData = await DeviceDataModel.findOne(deviceId)
         res.status(200).json({success:true,message:"Device data fetched successfully",deviceData})
         

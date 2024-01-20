@@ -3,10 +3,11 @@
     overflow: hidden;
     white-space: nowrap;
     text-overflow: ellipsis;
+
   }
   
   @media screen and (max-width: 600px) {
-    .custom-cell {
+    .customCell {
       max-width: 100px;
     }
   }

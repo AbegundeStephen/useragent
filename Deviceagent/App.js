@@ -87,13 +87,13 @@ import { selectDeviceInfo,selectUptime } from './redux/deviceInfoSlice.js';
     <ScrollView >
    
         <LinearGradient
-  colors={['blue', 'yellow']}
-  start={{ x: 0, y: 0 }}
+  colors={['purple', 'green']}
+  start={{ x: 3, y: 3 }}
   end={{ x: 1, y: 1 }}
   style={{ flex: 1,
     alignItems: 'center',
     justifyContent: 'center',
-    marginTop:50,gap:10,height:'auto' }}
+    marginTop:50,gap:10,height:'auto',borderRadius:"10px"}}
 > 
      <NetworkInfo />
      <DeviceInfo />
@@ -115,8 +115,8 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     height:'100%',
     marginTop:'45px',
-     backgroundColor:'-moz-radial-gradient(circle at 3% 25%, rgba(0, 40, 83, 1) 0%, rgba(4, 12, 24, 1) 25%)',
-    color:"black"
+    //  backgroundColor:'-moz-radial-gradient(circle at 3% 25%, rgba(0, 40, 83, 1) 0%, rgba(4, 12, 24, 1) 25%)',
+    // color:"black"
   },
   title: {
     fontSize: 24,

@@ -1,5 +1,5 @@
 import { Inter } from 'next/font/google'
-import DeviceData from '@/components/devicedata/DeviceData'
+import DeviceData from '@/components/devicedata/DevicesDataTable'
 import Login from '@/components/LoginPage/Login'
 import { useState } from 'react'
 import Link from 'next/link'

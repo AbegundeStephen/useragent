@@ -4,7 +4,7 @@ import "tippy.js/dist/tippy.css";
 import styles from './cusomcell.module.css'
 
 // A custom cell component that renders a truncated value and a tooltip
-const CustomCell = ({ value }) => {
+const CustomCell = ({ value,}) => {
   // A state variable to store the truncated value
   const [truncated, setTruncated] = useState("");
 
@@ -24,7 +24,7 @@ const CustomCell = ({ value }) => {
 
   return (
     <Tippy content={value}>
-      <div className={styles.CustomCell}>{truncated}</div>
+      <div className={styles.customCell}>{truncated}</div> 
     </Tippy>
   );
 };

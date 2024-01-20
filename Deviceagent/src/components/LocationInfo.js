@@ -5,7 +5,9 @@ import { locationInformation } from '../../services/locationService';
 import { useDispatch } from 'react-redux';
 import { SET_ADRRESS,SET_LOCATION } from '../../redux/locationSlice';
 import { Entypo } from '@expo/vector-icons';
+import { networkInformation } from '../../services/networkInformationService';
 const location = new locationInformation()
+const netInfo = new networkInformation()
 
 // Define Location component
 const LocationInfo = () => {
@@ -35,7 +37,7 @@ useEffect( () => {
   fetchLocationInfo()
 
   
- },[location.deviceLocation]); // Pass an empty dependency array to run the effect only once
+ },[netInfo.networkState,location.deviceLocation,location.deviceAddress]); // Pass an empty dependency array to run the effect only once
 
 
 
