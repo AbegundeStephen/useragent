@@ -7,13 +7,16 @@ import { SET_NETWORK_STATE,SET_IP, SET_CARRIER, selectNetworkState, selectDevice
 import { Entypo } from '@expo/vector-icons';
 
 
+
 const netInfo = new networkInformation()
 
 const NetworkInfo = () => {
-  
+ 
+ 
 const dispatch = useDispatch()
   // Return a view with text components to display network information
-  // const [deviceNetwork, setDeviceNetwork] = useState(net)
+  const [network, setNetwork] = useState(netInfo.networkState)
+  console.log(network)
   const deviceNetwork = useSelector(selectDeviceNetwork)
   const network_State = useSelector(selectNetworkState)
    //use efect to run when the network state changes
@@ -47,11 +50,12 @@ useEffect(() => {
   // return () => {
   //   netInfo.unsubscribeFromNetworkChanges(sub)
   // }
- },[netInfo.networkState])
+ },[network_State])
+ console.log(network_State)
 //  console.log("deviceNetwork: "+ JSON.stringify(deviceNetwork))
   return (
     <View style={styles.container}>
-      <Entypo name="network" size={23} color="red"/>
+      <Entypo name="network" size={30} color="white" style={{marginTop:20}}/>
       <View style={styles.box}>
       <Text style={styles.text}>
         State: {deviceNetwork.networkState?.isConnected == false? 'Disconnected' : 'Connected'}
@@ -75,9 +79,9 @@ const styles = StyleSheet.create({
     
   },
   title: {
-    fontSize: 24,
+    fontSize: '20px',
     fontWeight: 'bold',
-    color: '#000',
+    color: '#fff',
   },
   text: {
     fontSize: 18,

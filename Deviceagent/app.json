@@ -2,15 +2,15 @@
   "expo": {
     "name": "Useragent",
     "slug": "useragent",
-    "version": "1.0.0",
+    "version": "1.1.0",
     "orientation": "portrait",
     "jsEngine": "hermes",
     "icon": "./assets/useradgent-291665.jpg",
     "userInterfaceStyle": "light",
     "splash": {
-      "image": "./assets/splash.png",
+      "image": "./assets/useradgent-291665.jpg",
       "resizeMode": "contain",
-      "backgroundColor": "#ffffff"
+      "backgroundColor": "#3e5430"
     },
     "assetBundlePatterns": [
       "**/*"
@@ -21,8 +21,8 @@
     },
     "android": {
       "adaptiveIcon": {
-        "foregroundImage": "./assets/adaptive-icon.png",
-        "backgroundColor": "#ffffff"
+        "foregroundImage": "./assets/useradgent-291665.jpg",
+        "backgroundColor": "#3e5430"
       },
       "permissions": [
         "android.permission.ACCESS_COARSE_LOCATION",
@@ -33,7 +33,7 @@
       "package": "com.abegunde93.useragent"
     },
     "web": {
-      "favicon": "./assets/favicon.png"
+      "favicon": "./assets/useradgent-291665.jpg"
     },
     "plugins": [
       [

@@ -54,7 +54,7 @@ const dispatch = useDispatch()
       <Text style={styles.text}>OS Version: {deviceInfo.deviceInfo.osVersion}</Text>
       <Text style={styles.text}>AndroidId: {deviceInfo.deviceInfo.androidId}</Text>
       <Text style={styles.text}>Ram: {deviceInfo.deviceInfo.totalMemory} </Text>
-      <Text style={styles.text}>Up since: {timeFormatter(deviceInfo.uptime)}</Text>
+      <Text style={styles.text}>Uptime: {timeFormatter(deviceInfo.uptime)}</Text>
     </View>
     </>
   );
@@ -81,7 +81,7 @@ const styles = StyleSheet.create({
      fontWeight: 'bold',
     fontFamily: 'sans-serif',
     fontStyle:"normal",
-    color:"black"
+    color:"gold"
      
   },
 

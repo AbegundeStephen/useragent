@@ -16,6 +16,7 @@ class networkInformation {
     this.networkState = null;
     this.ipAddress = null;
     this.carrier = null;
+    this.isConnected = null;
     // this.macAddress = null;
 
     this.getNetworkState()
@@ -36,7 +37,8 @@ class networkInformation {
 
       // Assign network state to property
       this.networkState = networkState;
-      console.log("network state",networkState)
+      this.isConnected = networkState.isConnected
+      console.log("network state",networkState,this.isConnected)
       return networkState
     } catch (error) {
       // Handle error

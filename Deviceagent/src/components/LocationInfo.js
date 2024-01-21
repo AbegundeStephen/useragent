@@ -75,7 +75,7 @@ useEffect( () => {
   // Return a view with text components to display location information
   return (
     <View style={styles.container}>
-      <Entypo name="location-pin" size={34} color="red" />
+      <Entypo name="location-pin" size={45} color="red" />
       <Text style={styles.text}>Latitude: {deviceLocation ? deviceLocation.deviceLocation?.coords.latitude : 'N/A'}</Text>
       <Text style={styles.text}>Longitude: {deviceLocation ? deviceLocation.deviceLocation?.coords.longitude : 'N/A'}</Text>
       <Text style={styles.text}>{deviceLocation.deviceAddress ? deviceLocation.deviceAddress : 'N/A'}</Text>
@@ -98,7 +98,9 @@ const styles = StyleSheet.create({
   },
   text: {
     fontSize: 18,
-    color: '#000',
+    color: 'white',
+    fontFamily: 'sans-serif',
+    fontWeight: 'bold',
   },
 });
 
