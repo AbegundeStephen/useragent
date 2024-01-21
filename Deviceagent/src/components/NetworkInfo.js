@@ -15,7 +15,7 @@ const NetworkInfo = () => {
  
 const dispatch = useDispatch()
   // Return a view with text components to display network information
-  const [network, setNetwork] = useState(netInfo.networkState)
+  const [network, setNetwork] = useState(netInfo)
   console.log(network)
   const deviceNetwork = useSelector(selectDeviceNetwork)
   const network_State = useSelector(selectNetworkState)
@@ -50,7 +50,7 @@ useEffect(() => {
   // return () => {
   //   netInfo.unsubscribeFromNetworkChanges(sub)
   // }
- },[network_State])
+ },[network])
  console.log(network_State)
 //  console.log("deviceNetwork: "+ JSON.stringify(deviceNetwork))
   return (

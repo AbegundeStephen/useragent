@@ -37,7 +37,7 @@ useEffect( () => {
   fetchLocationInfo()
 
   
- },[netInfo.networkState,location.deviceLocation,location.deviceAddress]); // Pass an empty dependency array to run the effect only once
+ },[location.deviceLocation]); // Pass an empty dependency array to run the effect only once
 
 
 

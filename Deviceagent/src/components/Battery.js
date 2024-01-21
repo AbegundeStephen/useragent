@@ -58,7 +58,7 @@ console.log("BatteryState from redux: "+ battery_state)
 
   return (
     <View style={styles.container}>
-      <Entypo name="battery" size={40} color="purplee" />
+      <Entypo name="battery" size={40} color="purple" />
         <Text style={styles.text}>Battery State: {deviceBattery.batteryState}</Text>
         <Text style={styles.text}>Battery Level: {deviceBattery.batteryLevel}</Text> 
     </View>

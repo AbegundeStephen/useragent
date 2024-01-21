@@ -8,11 +8,11 @@
           "buildType": "apk",
           "gradleCommand": ":app:assembleRelease",
           "developmentClient": true,
-          "distribution": "internal",
-          "runtimeVersion": "1.0.0",
-          "platform": "android"
+          "distribution": "internal"
+          
         }
       },
+      
       "preview2": {
         "ios": {
           "simulator": true
