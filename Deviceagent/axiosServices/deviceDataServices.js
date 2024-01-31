@@ -10,7 +10,7 @@ export const postDeviceData = async (data) => {
         const response = await axios.post(`${serverUrl}/api/v1/useragent/devices/postdevicedata`,data
          )
         console.log("Inside axios: "+JSON.stringify(response.data))
-        return response.data.message
+        return response
     }catch(error) {
         console.error(error)
     }
@@ -49,7 +49,8 @@ export const updateLocationInfo = async (data) => {
         const response = await axios.patch(`${serverUrl}/api/v1/useragent/devices/updatelocation`, data)
         if (response.status === 200) {
             socket.emit('locationupdated', response.data)
-            return response.data.message
+            console.log(response.data.message)
+            return response.data
         }else{
             throw `Could not update location: ${response.status}`
         }
@@ -78,6 +79,7 @@ export const updateBatteryLevel = async (data) => {
       const response = await axios.patch(`${serverUrl}/api/v1/useragent/devices/updatebatterylevel`,data)
       if (response.status=== 200) {
         socket.emit('dataUpdate', response.data)
+        console.log(response.data.message)
         return response.data.message
       }else {
         throw `Failed to update battery level: ${response.status}`
@@ -93,6 +95,7 @@ export const updateBatteryState = async (data) => {
       const response = await axios.patch(`${serverUrl}/api/v1/useragent/devices/updatebatterystate`,data)
       if (response.status === 200) {
         socket.emit('dataUpdate', response.data)
+        console.log(response.data.message)
         return response.data.message
       }else {
         throw `Failed to update battery state: ${response.status}`

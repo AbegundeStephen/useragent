@@ -46,21 +46,43 @@ class locationInformation {
     try {
     
       let location = await Location.getCurrentPositionAsync({
-        enableHighAccuracy: true,
-        accuracy: Location.Accuracy.High,
-        timeInterval: 1000,
-        distanceInterval: 1,});
+        // enableHighAccuracy: true,
+        accuracy: Location.Accuracy.BestForNavigation,
+        // timeInterval: 1000,
+        // distanceInterval: 1,
+      });
       // Assign location to property
       this.deviceLocation = location
       // Log location coordinates
-      await this.getDeviceAddress()
+     this.getDeviceAddress()
       return location
     } catch (error) {
       // Handle error
       console.error(error);
     }
   }
+ //Watch Position and update state
 
+ async watchLocationChanges() {
+    let {status} = Location.requestForegroundPermissionsAsync()
+    if (status !== "granted") {
+      alert("Permission to watch location changes was denied")
+      return
+    }
+
+    try {
+      let location = await Location.watchPositionAsync({
+        enableHighAccuracy: true,
+        accuracy: Location.Accuracy.BestForNavigation,
+        timeInterval: 1000,
+        distanceInterval: 1,})
+        this.deviceLocation = location
+        this.getDeviceAddress()
+
+    }catch(err) {
+      alert("Couldn't watch for location changes:")
+    }
+ }
   // Define a method to get the device address
   async getDeviceAddress() {
     // Check if the device location is available

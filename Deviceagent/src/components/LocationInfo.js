@@ -6,19 +6,57 @@ import { useDispatch } from 'react-redux';
 import { SET_ADRRESS,SET_LOCATION } from '../../redux/locationSlice';
 import { Entypo } from '@expo/vector-icons';
 import { networkInformation } from '../../services/networkInformationService';
+import axios from 'axios';
+import * as Location from 'expo-location'
+import * as TaskManager from 'expo-task-manager'
+import { getDeviceAddress } from '../../utils/utils';
+
+const LOCATION_TASK_NAME = 'background-location-task'
+
 const location = new locationInformation()
 const netInfo = new networkInformation()
 
 // Define Location component
 const LocationInfo = () => {
 const [deviceLocation, setDeviceLocation] = useState(location)
+
+
+
 const dispatch = useDispatch()
 
 
-//  useEffect to run location updates
+//useEffect for background location updates
+useEffect(() => {
+  (async () => {
+    let {status:fore_ground} = await Location.requestForegroundPermissionsAsync()
+    if(fore_ground !=='granted') {
+      console.log("Permission to access location was denied")
+      return
+    }
+
+    let {status:back_ground} = await Location.requestBackgroundPermissionsAsync()
+    if(back_ground !=='granted') {
+      console.log("Permission for background access location was denied")
+      return
+    }
+
+    await Location.startLocationUpdatesAsync(LOCATION_TASK_NAME,{
+      accuracy:Location.Accuracy.BestForNavigation,
+      timeInterval:1000,
+      distanceInterval:1,
+      foregroundService:{
+        notificationTitle:"This app is using your location",
+        notificationBody:"Live tracker is on"
+      }
+    })
+  })
+  ();
+})
+
+ //  useEffect to run location updates
 useEffect( () => {
   const location = new locationInformation
-  const fetchLocationInfo = async() =>{
+  const fetchLocationInfo = async() => {
 
     try{
      await location.getDeviceLocation()
@@ -45,34 +83,45 @@ useEffect( () => {
  //useEffect to watch location changes
 
  useEffect(() => {
-  // Watch location changes and update state
-  const watch = async() => {
-    try{
-      await location.watchLocation()
-      await location.getDeviceAddress()
-      dispatch(SET_LOCATION(location.deviceLocation?.coords))
-      dispatch(SET_ADRRESS(location.deviceAddress))
-      
-      setDeviceLocation(location)
-  
-    }catch(error) {
-     console.log("Issues watching location changes: ", + error)
-    }
-   }
-   watch();
-   
-  
+  (async() => {
+    console.log("useEffect for watching location changes called")
+  let {status} = await Location.requestForegroundPermissionsAsync()
+  if(status !== 'granted') {
+    console.log("Permission to acces Location in the foreground was denied")
+    return
+  }
+ let currentLocation = await Location.watchPositionAsync({
+    accuracy:Location.Accuracy.BestForNavigation,
+    timeInterval:5000,
+    distanceInterval:1000,
+    foregroundService: {
+      notificationTitle: 'Using your location',
+      notificationBody: 'To turn off, go back to the app and switch something off.',
+    },
+  },async(newLocation)=>{
+    const {latitude,longitude}= newLocation?.coords
+    console.log("New Location: " + JSON.stringify(newLocation))
+   let address = await getDeviceAddress(latitude,longitude)
+   console.log("New Address: " + address)
+    setDeviceLocation({
+      deviceLocation:newLocation,
+      deviceAddress:address
+    })
+    dispatch(SET_LOCATION(newLocation))
+    dispatch(SET_ADRRESS(address))
+  })
+  // return ()=>{
+  //   currentLocation.remove()
+  // };
+  })
+  ();
 
   
-  // Return a cleanup function to stop watching location
-  // return () => {
-  //   location.stopWatchingLocation(sub);
-  // };
- },[dispatch, location])
+ },[])
+
+ 
+
   
-// console.log("deviceLocation: "+ JSON.stringify(deviceLocation))
-// console.log("coords: "+ JSON.stringify(deviceLocation.deviceLocation?.coords))
-  // Return a view with text components to display location information
   return (
     <View style={styles.container}>
       <Entypo name="location-pin" size={45} color="red" />

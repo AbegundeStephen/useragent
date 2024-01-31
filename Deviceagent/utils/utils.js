@@ -1,3 +1,7 @@
+import AsyncStorage from "@react-native-async-storage/async-storage"
+import { updateExistingData } from "../axiosServices/deviceDataServices"
+import * as Battery from 'expo-battery'
+
 export const timeFormatter = uptime => {
     const currentTime = new Date().getTime()
     const difference = currentTime - uptime
@@ -45,4 +49,50 @@ export const toPercent = (number, decimals) => {
         return key + value
       }
     }
+  }
+
+  export const getDeviceAddress = async (latitude,longitude) => {
+  // const mobileId = await AsyncStorage.getItem("mobileId")
+  
+    let apiKey = 'AIzaSyBmHrZFN3RACRhbPeDkZCT_IpAmSzph1sw'; // Replace with your own API key
+    let url = `https://maps.googleapis.com/maps/api/geocode/json?latlng=${latitude},${longitude}&key=${apiKey}`;
+    // Fetch the response from the API
+    let response = await fetch(url);
+    // Parse the response as JSON
+    let data = await response.json();
+
+    // Check if the response is successful and contains results
+    if (data.status === 'OK' && data.results.length > 0) {
+      // Get the first result as the most relevant address
+      let address = data.results[0].formatted_address;
+      return address
+
+    } else {
+      // Handle error or no results
+      console.log('Geocoding failed or no results');
+    }
+
+  }
+
+ export const getBatteryState = async() => {
+    // Use expo-battery method to get the battery state
+    let batteryState = await Battery.getBatteryStateAsync();
+    // Convert the battery state to a string
+    switch (batteryState) {
+      case Battery.BatteryState.UNKNOWN:
+        batteryState = 'Unknown';
+        break;
+      case Battery.BatteryState.UNPLUGGED:
+       batteryState = 'Unplugged';
+        break;
+      case Battery.BatteryState.CHARGING:
+       batteryState = 'Charging';
+        break;
+      case Battery.BatteryState.FULL:
+        batteryState = 'Full';
+        break;
+        
+    }
+    
+    return batteryState
   }

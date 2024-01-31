@@ -11,6 +11,7 @@ import { Entypo } from '@expo/vector-icons';
 const netInfo = new networkInformation()
 
 const NetworkInfo = () => {
+
  
  
 const dispatch = useDispatch()

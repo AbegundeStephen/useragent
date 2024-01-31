@@ -3,6 +3,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import { updateExistingData } from '../axiosServices/deviceDataServices';
 import { store } from '../redux/store';
 import { SET_BATTERY_STATE,SET_BATTERY_LEVEL } from '../redux/batterySlice';
+import * as TaskManager from 'expo-task-manager'
 
 class batteryInfo {
     constructor() {

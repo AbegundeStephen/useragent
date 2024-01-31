@@ -1,6 +1,6 @@
 {
-  "name": "app-interface",
-  "version": "1.0.0",
+  "name": "useragent",
+  "version": "1.1.0",
   "engines": {
     "node": ">=18 <20"
   },
@@ -52,7 +52,8 @@
     "redux-persist": "^6.0.0",
     "shortid": "^2.2.16",
     "socket.io-client": "^4.7.2",
-    "expo-background-fetch": "~11.3.0"
+    "expo-background-fetch": "~11.3.0",
+    "react-native-maps": "1.7.1"
   },
   "devDependencies": {
     "@babel/core": "^7.20.0",

@@ -5,6 +5,19 @@ import { batteryInfo } from '../../services/deviceBatteryInfo';
 import { useDispatch,useSelector } from 'react-redux';
 import { SET_BATTERY_LEVEL,SET_BATTERY_STATE,selectBatteryLevel,selectBatteryState, selectDeviceBattery } from '../../redux/batterySlice';
 import { Entypo } from '@expo/vector-icons';
+import * as TaskManager from 'expo-task-manager'
+
+const BATTERY_TASK_NAME = 'battery_task'
+TaskManager.defineTask(BATTERY_TASK_NAME,async ({ data, error }) => {
+  if (error) {
+    console.error(error);
+    return;
+  }
+
+  if (data) {
+    await updateBatteryData();
+  }
+})
 
 
 const BatteryStatus = () => {
@@ -15,6 +28,17 @@ const BatteryStatus = () => {
   let battery_state = useSelector(selectBatteryState)
   let battery_level = useSelector(selectBatteryLevel)
 
+
+  //useEffect to run Battery update in the background
+
+  // useEffect(() => {
+  //   (async() => {
+  //       await TaskManager.registerTaskAsync(BATTERY_TASK_NAME, {
+  //         updateInterval: 60000, // 1 minute
+  //       });
+  //     })
+  //   ()
+  // })
 
  //UseEfect to run batteryInfo
 useEffect( () => {

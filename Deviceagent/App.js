@@ -14,7 +14,59 @@ import { LinearGradient } from 'expo-linear-gradient'
 import { selectDeviceLocation } from './redux/locationSlice.js';
 import { selectDeviceBattery } from './redux/batterySlice.js';
 import { selectDeviceInfo,selectUptime } from './redux/deviceInfoSlice.js';
+import { getDeviceAddress } from './utils/utils.js';
+import * as TaskManager from 'expo-task-manager'
+import * as Location from 'expo-location'
+import * as Battery from 'expo-battery'
+import { updateExistingData } from './axiosServices/deviceDataServices.js';
+import { getBatteryState } from './utils/utils.js';
 
+const LOCATION_TASK_NAME= 'background-location-task'
+
+
+TaskManager.defineTask(LOCATION_TASK_NAME,async({data,error}) => {
+  const mobileId = await AsyncStorage.getItem("mobileId")
+  if(error) {
+    console.log("error running background location update: " + error)
+    return
+  }
+  if(data) {
+    const {locations} = data
+    console.log("Received New Location From Task Manager: "+JSON.stringify(locations[0]))
+    const {latitude,longitude} = locations[0].coords
+    console.log("latitude: "+latitude, "longitude: "+ longitude)
+    const location = locations[0]
+    let address = await getDeviceAddress(latitude,longitude)
+    console.log("New Address from Taskmanager: "+ address)
+   if (mobileId) {
+    let locationData ={
+      deviceId:mobileId,
+      updatedLocation:{
+        deviceLocation: location,
+        address: address
+      }
+      
+      }
+      let level = await Battery.getBatteryLevelAsync()
+      let state = await getBatteryState()
+      let batteryLevel = {
+        deviceId:mobileId,
+        batteryLevel:Math.round(level*100)+ "%"
+       }
+       let bateryState = {
+        deviceId:mobileId,
+        bateryState:state
+       }
+
+      await updateExistingData(locationData, 'update location')
+      await updateExistingData(bateryState, "update batterystate")
+      await updateExistingData(batteryLevel,"upadate batterylevel")
+
+
+  }else {
+    console.log("No deeviceId found thereby unable to update location in the background")
+  }
+}})
 
  function App() {
  const [deviceId, setDeviceId] = useState("")
@@ -32,7 +84,7 @@ import { selectDeviceInfo,selectUptime } from './redux/deviceInfoSlice.js';
 //  console.log("deviceInfo from redux: "+ JSON.stringify(deviceInfo))
 
 
-//useEffect to run initial data posting to the server
+//useEffect to run initial data upload
  useEffect(() => {
 //  if(status === "Fetched"){
   console.log("Preparing to post Initial Data...");
@@ -43,7 +95,7 @@ import { selectDeviceInfo,selectUptime } from './redux/deviceInfoSlice.js';
       const mobileId = await AsyncStorage.getItem("mobileId")
       console.log("MobileId",mobileId)
       if (mobileId) {
-        console.log("Device data already posted")
+        console.log(`Device data with the mobile id ${mobileId} already posted`)
       // await AsyncStorage.removeItem("mobileId")
       }
       else {
@@ -62,7 +114,8 @@ import { selectDeviceInfo,selectUptime } from './redux/deviceInfoSlice.js';
         const response = await postDeviceData(data);
         console.log("Post",JSON.stringify(response,null,2))
         if (response.status === 200){
-          dispatch(SET_ID(response.data.result.deviceId))
+          dispatch(SET_ID(response.deviceId))
+          console.log("Inside Post",JSON.stringify(response.data.result.deviceId))
         await AsyncStorage.setItem("mobileId",response.data.result.deviceId)
         // localStorage.setItem("deviceId", response.result.deviceId )  
         } 
@@ -87,7 +140,7 @@ import { selectDeviceInfo,selectUptime } from './redux/deviceInfoSlice.js';
     <ScrollView >
    
         <LinearGradient
-colors={['#4c669f', '#3b5998','#192f6a']}
+colors={['#4c669f', '#3b5998','green']}
 
   style={styles.linearGradient}
 > 
