@@ -43,7 +43,7 @@ TaskManager.defineTask(LOCATION_TASK_NAME,async({data,error}) => {
       deviceId:mobileId,
       updatedLocation:{
         deviceLocation: location,
-        address: address
+        deviceAddress: address
       }
       
       }
