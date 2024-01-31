@@ -151,7 +151,7 @@ export const updateLocation = asyncHandler(async (req,res) => {
 
         }
 
-        const newLocation = await DeviceDataModel.updateOne({deviceId}, {$set:{"deviceLocation.deviceLocation":updatedLocation.deviceLocation, "deviceLocation.address":updatedLocation.address}},{new:true, runValidators: true})
+        const newLocation = await DeviceDataModel.updateOne({deviceId}, {$set:{"deviceLocation.deviceLocation":updatedLocation.deviceLocation, "deviceLocation.deviceAddress":updatedLocation.deviceAddress}},{new:true, runValidators: true})
         if (newLocation.modifiedCount) {
             io.emit("dataUpdate", {deviceId,updatedLocation})
             res.status(200).json({success:true,message:"Location updated successfully"})
